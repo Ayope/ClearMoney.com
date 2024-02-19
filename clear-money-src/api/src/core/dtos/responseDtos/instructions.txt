@@ -1,0 +1,2 @@
+- add in this folder the dtos returned to the user when it execute an operation (add - update - delete)
+- the dtos will be added when the functions for these operations are added
