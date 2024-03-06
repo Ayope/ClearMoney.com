@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
-import {
-  AppController,
-} from './controllers';
+import { AuthController } from './controllers';
 import { DataServicesModule } from './services/data-services/data-services.module'; 
 import { ConfigModule } from '@nestjs/config';
-import { FirebaseModule } from './frameworks/auth-services/firebase/firebase.module';
 import { AuthServicesModule } from './services';
+import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
+import { AuthUseCasesModule } from './use-cases/auth/auth-use-cases.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({}),
     DataServicesModule,
-    AuthServicesModule
+    AuthServicesModule,
+    AuthUseCasesModule,
+    UserUseCasesModule
   ],
   controllers: [
-    AppController,
+    AuthController
   ],
   providers: [],
 })

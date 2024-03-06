@@ -1,4 +1,4 @@
-import { IDataServices } from "@/core";
+import { IDataServices, User } from "@/core";
 import { IAuthRepository } from "@/core/abstracts/auth-services/auth-repository.abstract";
 import { Injectable } from "@nestjs/common";
 
@@ -6,8 +6,13 @@ import { Injectable } from "@nestjs/common";
 export class UserUseCases{
     constructor(
         private dataServices : IDataServices,
-        private authService : IAuthRepository
     ){}
 
-    
+    createUser(user : User){
+        return this.dataServices.Users.create(user);
+    }
+
+    getByAuthServiceID(id : string){
+        return this.dataServices.Users.getOneBySpecificColumn('authServiceID', id);
+    }
 }

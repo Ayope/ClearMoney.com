@@ -1,0 +1,2 @@
+add firebase functions to check token 
+remove password from mongodb and let it be just in firebase

@@ -7,6 +7,7 @@ export class User{
     last_name : string
     email : string
     password : string
+    authServiceID : string
     // FinancialTransactions : FinancialTransaction[]
     // DailyExpenses : DailyExpense[]
     // Goals : Goal[]

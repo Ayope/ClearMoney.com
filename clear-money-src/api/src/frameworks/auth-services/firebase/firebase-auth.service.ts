@@ -6,11 +6,11 @@ import { IAuthRepository } from '@/core/abstracts/auth-services/auth-repository.
 export class FirebaseAuthService implements IAuthRepository {
   constructor(@Inject('FIREBASE_AUTH') private auth: Auth) {}
 
-  async signup(email: string, password: string) {
-    return await createUserWithEmailAndPassword(this.auth, email, password);   
+  signup(email: string, password: string) : Promise<any> {
+    return createUserWithEmailAndPassword(this.auth, email, password);   
   }
 
-  async login(email: string, password: string) {
-    return await signInWithEmailAndPassword(this.auth, email, password);
+  login(email: string, password: string) : Promise<any> {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 }
