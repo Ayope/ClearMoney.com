@@ -15,4 +15,8 @@ export class UserUseCases{
     getByAuthServiceID(id : string){
         return this.dataServices.Users.getOneBySpecificColumn('authServiceID', id);
     }
+
+    getByEmail(email : string){
+        return this.dataServices.Users.getOneBySpecificColumn('email', email);
+    }
 }

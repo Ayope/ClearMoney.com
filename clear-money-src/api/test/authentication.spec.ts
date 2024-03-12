@@ -10,8 +10,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '@/app.module';
 import * as request from 'supertest';
 import { LoginDto } from '@/core/dtos/requestDtos/login.dto';
-import mongoose from 'mongoose';
-
 
 describe('Authentication (login and signup) tests', () => {
     let authController: AuthController;
@@ -114,13 +112,14 @@ describe('Authentication (login and signup) tests', () => {
             expect(response.status).toBe(400);
             expect(response.body).toEqual(
                 {
+                    "timestamp": expect.any(String),
                     "statusCode": 400,
-                    "message": "Validation failed",
-                    "success": false,
-                    "data": [
+                    "message": [
                         "email should not be empty",
                         "email must be an email"
-                    ]
+                    ],
+                    "success": false,
+                    "data": "Validation failed"
                 }
             );
         });
@@ -172,13 +171,14 @@ describe('Authentication (login and signup) tests', () => {
             expect(response.status).toBe(400);
             expect(response.body).toEqual(
                 {
+                    "timestamp": expect.any(String),
                     "statusCode": 400,
-                    "message": "Validation failed",
-                    "success": false,
-                    "data": [
+                    "message": [
                         "email should not be empty",
                         "email must be an email"
-                    ]
+                    ],
+                    "success": false,
+                    "data": "Validation failed"
                 }
             );
         });

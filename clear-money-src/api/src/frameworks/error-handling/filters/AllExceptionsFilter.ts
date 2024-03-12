@@ -1,12 +1,15 @@
 import { Catch, ExceptionFilter, ArgumentsHost, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 import { FirebaseError } from 'firebase/app';
+import { MongoError } from 'mongodb';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+
+    const timestamp = new Date().toISOString();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal Server Error';
@@ -21,10 +24,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const validationErrors = exception.getResponse();
       message = 'Validation failed';
       return response.status(status).json({
+        timestamp,
         statusCode: status,
-        message: message,
+        message: validationErrors['message'],
         success: false,
-        data: validationErrors['message'],
+        data: message,
       });
     }
 
@@ -45,9 +49,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     }
 
+    if (exception instanceof MongoError) {
+      if (exception.code === 11000) {
+        status = HttpStatus.BAD_REQUEST;
+        const keyMatch = exception.message.match(/index: (\w+)_\d+ dup key/);
+        const key = keyMatch ? keyMatch[1] : 'unknown';
+        message = `Duplicated ${key}`;
+      } else {
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+        message = 'An unexpected error occurred while processing your request.';
+      }
+    }
+
     console.error(exception);
 
     response.status(status).json({
+      timestamp,
       statusCode: status,
       message: message,
       success: false,
