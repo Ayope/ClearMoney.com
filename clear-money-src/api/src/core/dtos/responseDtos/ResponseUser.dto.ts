@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from "@/core/entities";
 
-type UserWithoutPassword = Omit<User, 'password' | 'authServiceID'> & { id: string };
+export type UserWithoutPassword = Omit<User, 'password' | 'authServiceID'> & { id: string };
 
 export class ResponseUserDto {
     @ApiProperty({ description: 'Indicates whether the request was successful or not' })
@@ -33,4 +33,5 @@ export class ResponseUserDto {
         refreshToken: string;
         expirationTime: number;
     }
+    static responseUser: any;
 }

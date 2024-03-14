@@ -19,15 +19,16 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
   }
 
   create(item: T): Promise<T> {
-    return this._repository.create(item);
+    return this._repository.create(item)
+    .then(createdItem => this._repository.findById(createdItem._id).populate(this._populateOnFind).exec()) as Promise<T | null>;
   }
 
   update(id: string, item: T) : Promise<T>{
-    return this._repository.findByIdAndUpdate(id, item, { new: true });
+    return this._repository.findByIdAndUpdate(id, item, { new: true }).populate(this._populateOnFind).exec() as Promise<T | null>;
   }
 
   delete(id:string): Promise<T> {
-    return this._repository.findByIdAndDelete(id);
+    return this._repository.findByIdAndDelete(id).populate(this._populateOnFind).exec() as Promise<T | null>;
   }
 
   getOneBySpecificColumn(columnName:string, columnValue:any): Promise<T> {

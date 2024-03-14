@@ -7,6 +7,11 @@ import { AuthServicesModule } from './services';
 import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
 import { AuthUseCasesModule } from './use-cases/auth/auth-use-cases.module';
 import { CategoryController } from './controllers/category.controller';
+import { FinancialTransactionModule } from './use-cases/financial-transaction/financial-transaction-use-cases.module';
+import { FinancialTransactionController } from './controllers/financial-transaction.controller';
+import { DailyExpenseModule } from './use-cases/daily-expense/daily-expense-use-cases.module';
+import { DailyExpenseController } from './controllers/daily-expense.controller';
+import { GoalModule } from './use-cases/goal/goal-use-cases.module';
 
 @Module({
   imports: [
@@ -15,11 +20,16 @@ import { CategoryController } from './controllers/category.controller';
     AuthServicesModule,
     AuthUseCasesModule,
     UserUseCasesModule,
-    CategoryUseCasesModule
+    CategoryUseCasesModule,
+    FinancialTransactionModule,
+    DailyExpenseModule,
+    GoalModule
   ],
   controllers: [
     AuthController,
-    CategoryController
+    CategoryController,
+    FinancialTransactionController,
+    DailyExpenseController
   ],
   providers: [],
 })

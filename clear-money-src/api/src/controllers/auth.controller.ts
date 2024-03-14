@@ -9,7 +9,7 @@ import { Body, Controller, Post } from "@nestjs/common";
 import { ApiTags, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BadRequestException } from "@nestjs/common";
 
-@ApiTags('auth')
+@ApiTags('Authentication')
 @Controller('api/auth')
 export class AuthController{
 
