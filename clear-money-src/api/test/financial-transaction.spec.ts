@@ -71,7 +71,7 @@ describe('FinancialTransactionController', () => {
             description: 'Test Description',
             type: FinancialType.Expense,
             category_id: 'testCategoryId',
-            user_id: 'testUserId',
+            user_id: 'mockUserId',
         };
 
         const financialTransaction = {
@@ -80,7 +80,7 @@ describe('FinancialTransactionController', () => {
             description: 'Test Description',
             type: FinancialType.Expense,
             category: 'testCategoryId',
-            user: 'testUserId',
+            user: 'mockUserId',
         };
 
         const createdFinancialTransaction = {

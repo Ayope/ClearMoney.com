@@ -23,4 +23,8 @@ export class UserUseCases{
     getUser(id : string){
         return this.dataServices.Users.get(id);
     }
+
+    deleteAllUsers(){
+        return this.dataServices.Users.deleteAll();
+    }
 }

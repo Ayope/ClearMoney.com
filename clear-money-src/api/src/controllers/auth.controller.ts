@@ -8,6 +8,7 @@ import { UserUseCases } from "@/use-cases/user/user.use-case";
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiTags, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BadRequestException } from "@nestjs/common";
+import { bcrypt } from "bcrypt"
 
 @ApiTags('Authentication')
 @Controller('api/auth')
@@ -45,11 +46,16 @@ export class AuthController{
     @ApiResponse({ status: 500, description: 'Internal server error' })
     async signup(@Body() userDto : CreateUserDto) : Promise<ResponseUserDto> {
         const user = this.userFactoryService.createNewUser(userDto);
+        
         if (await this.userUseCases.getByEmail(user.email)) {
             throw new BadRequestException('Email is already in use');
         }
+        
         const authenticatedUser = await this.authUseCases.signup(user.email, user.password);
+        
         user.authServiceID = authenticatedUser.user.uid;
+        user.password = bcrypt.hash(user.password, 10);
+
         const createdUser = await this.userUseCases.createUser(user);
 
         return this.createResponseUser({

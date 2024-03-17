@@ -23,11 +23,19 @@ export class FinancialTransactionUseCases{
         return this.dataServices.FinancialTransactions.get(id);
     }
 
+    getFinancialTransactionsByUserId(userId : string){
+        return this.dataServices.FinancialTransactions.getAllBySpecificColumn('user', userId);
+    }
+
     updateFinancialTransaction(id : string, FinancialTransaction : FinancialTransaction){
         return this.dataServices.FinancialTransactions.update(id, FinancialTransaction);
     }
 
     deleteFinancialTransaction(id : string){
         return this.dataServices.FinancialTransactions.delete(id);
+    }
+
+    deleteAllFinancialTransactions(){
+        return this.dataServices.FinancialTransactions.deleteAll();
     }
 }

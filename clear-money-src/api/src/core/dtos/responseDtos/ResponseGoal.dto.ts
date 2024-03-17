@@ -21,6 +21,12 @@ export class ResponseGoalDto {
   @ApiProperty({ description: 'The targeted date for the goal' })
   targeted_date: Date;
 
+  @ApiProperty({ description: 'The current amount of the goal' })
+  current_amount: number;
+
+  @ApiProperty({ description: 'The saving amount for the goal' })
+  saving_amount: number;
+
   @ApiProperty({
     description: 'The user of the financial transaction',
     type: 'object',

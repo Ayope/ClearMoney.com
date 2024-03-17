@@ -12,4 +12,5 @@ export abstract class IDataServices {
   abstract Categories: IGenericRepository<Category>;
 
   abstract Goals : IGenericRepository<Goal>;
+  
 }

@@ -10,6 +10,8 @@ export interface IGenericRepository<T> {
    
   delete(id: string): Promise<T>;
 
+  deleteAll() : Promise<any>;
+
   getOneBySpecificColumn(columnName : string, columnValue : any) : Promise<T>
 
   getAllBySpecificColumn(columnName : string, columnValue : any) : Promise<T[]>

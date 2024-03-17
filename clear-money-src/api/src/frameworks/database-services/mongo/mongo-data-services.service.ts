@@ -37,11 +37,11 @@ export class MongoDataServices implements IDataServices, OnApplicationBootstrap 
     @InjectModel(DailyExpense.name)
     private DailyExpenseRepository: Model<DailyExpenseDocument>,
   ) {}
-
+  
   onApplicationBootstrap() {
     this.Users = new MongoGenericRepository<User>(this.UserRepository);
     this.Goals = new MongoGenericRepository<Goal>(this.GoalRepository, ['user']);
-    this.Categories = new MongoGenericRepository<Category>(this.CategoryRepository);
+    this.Categories = new MongoGenericRepository<Category>(this.CategoryRepository, ['user']);
     this.FinancialTransactions = new MongoGenericRepository<FinancialTransaction>(this.FinancialTransactionRepository, [
       'category', 
       'user'

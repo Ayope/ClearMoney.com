@@ -30,4 +30,8 @@ export class CategoryUseCases{
     deleteCategory(id : string){
         return this.dataServices.Categories.delete(id);
     }
+
+    deleteAllCategories(){
+        return this.dataServices.Categories.deleteAll();
+    }
 }

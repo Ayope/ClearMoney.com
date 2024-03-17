@@ -12,6 +12,9 @@ import { FinancialTransactionController } from './controllers/financial-transact
 import { DailyExpenseModule } from './use-cases/daily-expense/daily-expense-use-cases.module';
 import { DailyExpenseController } from './controllers/daily-expense.controller';
 import { GoalModule } from './use-cases/goal/goal-use-cases.module';
+import { GoalController } from './controllers/goal.controller';
+import { ReportsController } from './controllers/reports.controller';
+import { SeederController } from './controllers/seeder.controller';
 
 @Module({
   imports: [
@@ -23,13 +26,16 @@ import { GoalModule } from './use-cases/goal/goal-use-cases.module';
     CategoryUseCasesModule,
     FinancialTransactionModule,
     DailyExpenseModule,
-    GoalModule
+    GoalModule,
   ],
   controllers: [
     AuthController,
     CategoryController,
     FinancialTransactionController,
-    DailyExpenseController
+    DailyExpenseController,
+    GoalController,
+    ReportsController,
+    SeederController
   ],
   providers: [],
 })

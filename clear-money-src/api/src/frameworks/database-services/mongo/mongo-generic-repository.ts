@@ -30,6 +30,10 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
   delete(id:string): Promise<T> {
     return this._repository.findByIdAndDelete(id).populate(this._populateOnFind).exec() as Promise<T | null>;
   }
+  
+  deleteAll() : Promise<any> {
+    return this._repository.deleteMany({});
+  }
 
   getOneBySpecificColumn(columnName:string, columnValue:any): Promise<T> {
     const query = { [columnName]: columnValue } as any;
@@ -39,5 +43,5 @@ export class MongoGenericRepository<T> implements IGenericRepository<T> {
   getAllBySpecificColumn(columnName:string, columnValue:any): Promise<T[]> {
     const query = { [columnName]: columnValue } as any;
     return this._repository.find(query).populate(this._populateOnFind).exec()
-  }
+  } 
 }

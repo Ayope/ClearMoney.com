@@ -1,6 +1,7 @@
 # compiled output
 /dist
 /node_modules
+/src/configuration/authentication-clear-money-firebase-adminsdk-gi1oc-a2be002b8e.json
 
 # Logs
 logs

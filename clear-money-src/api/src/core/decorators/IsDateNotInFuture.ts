@@ -1,9 +1,9 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
 
-export function IsDateNotInPast(validationOptions?: ValidationOptions) {
+export function IsDateNotInFuture(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: 'IsDateNotInPast',
+      name: 'IsDateNotInFuture',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
@@ -11,7 +11,7 @@ export function IsDateNotInPast(validationOptions?: ValidationOptions) {
         validate(value: any, args: ValidationArguments) {
           const dateValue = new Date(value);
           const now = new Date();
-          return dateValue > now;
+          return dateValue <= now;
         },
       },
     });

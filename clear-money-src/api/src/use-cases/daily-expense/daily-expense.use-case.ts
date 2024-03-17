@@ -30,4 +30,8 @@ export class DailyExpenseUseCases{
     deleteDailyExpense(id : string){
         return this.dataServices.DailyExpenses.delete(id);
     }
+
+    deleteAllDailyExpenses(){
+        return this.dataServices.DailyExpenses.deleteAll();
+    }
 }

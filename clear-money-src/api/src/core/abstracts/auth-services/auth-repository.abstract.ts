@@ -4,5 +4,7 @@ export abstract class IAuthRepository {
   
     abstract signup(email: string, password:string) : Promise<any>;    
     
+    abstract deleteAllUsers(): Promise<any>;
+
 }
   

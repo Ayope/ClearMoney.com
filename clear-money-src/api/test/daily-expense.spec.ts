@@ -2,8 +2,7 @@ import { AppModule } from "@/app.module";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { AllExceptionsFilter } from "@/frameworks/error-handling/filters/AllExceptionsFilter";
 import { Test, TestingModule } from "@nestjs/testing";
-import FinancialType from "@/core/enums/financial-type.enum";
-import { CreateDailyExpenseDto, CreateFinancialTransactionDto } from "@/core/dtos";
+import { CreateDailyExpenseDto } from "@/core/dtos";
 import { CategoryUseCases } from "@/use-cases/category/category.use-case";
 import { UserUseCases } from "@/use-cases/user/user.use-case";
 import * as request from 'supertest';
@@ -75,7 +74,7 @@ describe('FinancialTransactionController', () => {
             description: 'Test Description',
             date: date,
             category_id: 'testCategoryId',
-            user_id: 'testUserId',
+            user_id: 'mockUserId',
         };
 
         const dailyExpense = {
@@ -84,7 +83,7 @@ describe('FinancialTransactionController', () => {
             description: 'Test Description',
             date: date,
             category: 'testCategoryId',
-            user: 'testUserId',
+            user: 'mockUserId',
         };
 
         const createdDailyExpense = {

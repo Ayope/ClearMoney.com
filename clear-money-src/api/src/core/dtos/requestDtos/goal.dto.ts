@@ -1,7 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsNumber, IsEnum, IsNotEmpty, IsDate } from 'class-validator';
+import { IsString, IsNumber, IsEnum, IsNotEmpty, IsDate, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import SavingFrequency from '@/core/enums/savingFrequency.enum';
+import { IsDateNotInPast } from '@/core/decorators/IsDateNotInPast';
+import { Transform } from 'class-transformer';
 
 export class CreateGoalDto {
   @ApiProperty({ description: 'The name of the goal' })
@@ -27,11 +29,18 @@ export class CreateGoalDto {
   @ApiProperty({ description: 'The targeted date for the goal' })
   @IsDate()
   @IsNotEmpty()
+  @IsDateNotInPast({ message: 'Date cannot be in the past' })
+  @Transform(({ value }) => new Date(value))
   targeted_date: Date;
 
-  @ApiProperty({ description: 'The user id associated with the goal' })
+  @ApiProperty({ type : String, description: 'The user id associated with the goal' })
   @IsNotEmpty()
   user_id: any;
 }
 
-export class UpdateGoalDto extends PartialType(CreateGoalDto) {}
+export class UpdateGoalDto extends PartialType(CreateGoalDto) {
+  @ApiProperty({ description: 'The current amount of the goal', required: false })
+  @IsNumber()
+  @IsOptional()
+  current_amount: number;
+}

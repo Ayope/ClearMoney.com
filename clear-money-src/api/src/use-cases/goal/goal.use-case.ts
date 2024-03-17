@@ -30,4 +30,8 @@ export class GoalUseCases{
     deleteGoal(id : string){
         return this.dataServices.Goals.delete(id);
     }
+
+    deleteAllGoals(){
+        return this.dataServices.Goals.deleteAll();
+    }
 }

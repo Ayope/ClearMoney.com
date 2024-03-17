@@ -37,6 +37,12 @@ export class DailyExpenseController{
             category: {
                 id: DailyExpense.category?._id,
                 name: DailyExpense.category?.name,
+                user: {
+                    id: DailyExpense.user.id,
+                    first_name: DailyExpense.user.first_name,
+                    last_name: DailyExpense.user.last_name,
+                    email: DailyExpense.user.email,
+                }
             },
             user: {
                 id: DailyExpense.user.id,
@@ -47,10 +53,14 @@ export class DailyExpenseController{
         };
     }
     
-    private async checkIfDailyExpenseExist(DailyExpense : DailyExpense) {
-        if (await this.DailyExpenseUseCases.getByName(DailyExpense.name)) {
+    private async checkIfDailyExpenseExist(DailyExpense : DailyExpense, ignoreId ?: string) {
+
+        const existingDailyExpense = await this.DailyExpenseUseCases.getByName(DailyExpense.name);
+    
+        if (existingDailyExpense && existingDailyExpense['id'] !== ignoreId) {
             throw new BadRequestException('Daily Expense already exist');
         }
+
     }
 
     private async checkIfCategoryAndUserLegit(DailyExpenseDto : CreateDailyExpenseDto | UpdateDailyExpenseDto) {
@@ -85,15 +95,7 @@ export class DailyExpenseController{
         
         const createdDailyExpense = await this.DailyExpenseUseCases.createDailyExpense(DailyExpense);
         
-        return this.createResponseDailyExpense({
-            id: createdDailyExpense['id'],
-            name: createdDailyExpense.name,
-            amount: createdDailyExpense.amount,
-            description: createdDailyExpense.description,
-            date: createdDailyExpense.date,
-            category: createdDailyExpense.category,
-            user: createdDailyExpense.user,
-        });
+        return this.createResponseDailyExpense(createdDailyExpense);
 
     }
 
@@ -125,7 +127,7 @@ export class DailyExpenseController{
         
         const DailyExpense = this.DailyExpenseFactoryService.createUpdatedDailyExpense(DailyExpenseDto);
                 
-        await this.checkIfDailyExpenseExist(DailyExpense);
+        await this.checkIfDailyExpenseExist(DailyExpense, id);
         
         await this.checkIfCategoryAndUserLegit(DailyExpenseDto);
 

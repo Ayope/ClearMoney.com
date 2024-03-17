@@ -6,6 +6,10 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'The name of the category' })
   name: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ type : String, description: 'The user id of the category' })
+  user_id: any;
 }
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

@@ -37,19 +37,28 @@ export class FinancialTransactionController{
             category: {
                 id: FinancialTransaction.category?._id,
                 name: FinancialTransaction.category?.name,
+                user: {
+                    id: FinancialTransaction.user.id,
+                    first_name: FinancialTransaction.user.first_name,
+                    last_name: FinancialTransaction.user.last_name,
+                    email: FinancialTransaction.user.email,
+                }
             },
             user: {
-                id: FinancialTransaction.user.id,
-                first_name: FinancialTransaction.user.first_name,
-                last_name: FinancialTransaction.user.last_name,
-                email: FinancialTransaction.user.email,
+                id: FinancialTransaction.user?.id,
+                first_name: FinancialTransaction.user?.first_name,
+                last_name: FinancialTransaction.user?.last_name,
+                email: FinancialTransaction.user?.email,
             },
         };
     }
     
-    private async checkIfFinancialTransactionExist(FinancialTransaction : FinancialTransaction) {
-        if (await this.FinancialTransactionUseCases.getByName(FinancialTransaction.name)) {
-            throw new BadRequestException('Financial Transaction already exist');
+    private async checkIfFinancialTransactionExist(FinancialTransaction : FinancialTransaction, ignoreId ?: string) {
+
+        const existingFinancialTransaction = await this.FinancialTransactionUseCases.getByName(FinancialTransaction.name);
+        
+        if (existingFinancialTransaction && existingFinancialTransaction['id'] !== ignoreId) {
+            throw new BadRequestException('FinancialTransaction already exist');
         }
     }
 
@@ -84,15 +93,7 @@ export class FinancialTransactionController{
         
         const createdFinancialTransaction = await this.FinancialTransactionUseCases.createFinancialTransaction(FinancialTransaction);
         
-        return this.createResponseFinancialTransaction({
-            id: createdFinancialTransaction['id'],
-            name: createdFinancialTransaction.name,
-            amount: createdFinancialTransaction.amount,
-            description: createdFinancialTransaction.description,
-            type: createdFinancialTransaction.type,
-            category: createdFinancialTransaction.category,
-            user: createdFinancialTransaction.user,
-        });
+        return this.createResponseFinancialTransaction(createdFinancialTransaction);
 
     }
 
@@ -124,7 +125,7 @@ export class FinancialTransactionController{
         
         const FinancialTransaction = this.FinancialTransactionFactoryService.createUpdatedFinancialTransaction(FinancialTransactionDto);
                 
-        await this.checkIfFinancialTransactionExist(FinancialTransaction);
+        await this.checkIfFinancialTransactionExist(FinancialTransaction, id);
         
         await this.checkIfCategoryAndUserLegit(FinancialTransactionDto);
 

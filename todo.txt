@@ -1,2 +1,5 @@
 add firebase functions to check token 
 - understand token - add middleware
+- add to the swagger documentation the format of the error object on the 404 errors
+- when the saving amount for a goal get returned to a user show to him on the front that 
+he should save at the end of each starting from the current month

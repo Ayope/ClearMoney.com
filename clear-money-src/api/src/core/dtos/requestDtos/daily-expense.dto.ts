@@ -2,7 +2,8 @@ import { IsString, IsNumber, IsDate, IsNotEmpty } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsDateNotInPast } from '@/core/decorators/IsDateNotInPast';
+import { IsDateNotInFuture } from '@/core/decorators/IsDateNotInFuture';
+import { DailyExpense } from '@/core/entities';
 export class CreateDailyExpenseDto {
   @IsString()
   @IsNotEmpty()
@@ -21,14 +22,15 @@ export class CreateDailyExpenseDto {
   @IsDate()
   @IsNotEmpty()
   @Transform(({ value }) => new Date(value))
-  @IsDateNotInPast({ message: 'Date cannot be in the future' })
+  @IsDateNotInFuture({ message: 'Date cannot be in the future' })
   @ApiProperty({ description: 'The date of the daily expense' })
   date: Date;
 
-  @ApiProperty({ description: 'The category of the daily expense' })
+  @ApiProperty({ type : String, description: 'The category of the daily expense' })
   category_id: any;
 
   @IsNotEmpty()
+  @ApiProperty({ type : String, description: 'The user id of the daily expense' })
   user_id: any;
 }
 
