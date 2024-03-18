@@ -23,6 +23,10 @@ export class DailyExpenseUseCases{
         return this.dataServices.DailyExpenses.get(id);
     }
 
+    getDailyExpensesByUserId(userId : string){
+        return this.dataServices.DailyExpenses.getAllBySpecificColumn('user', userId);
+    }
+
     updateDailyExpense(id : string, dailyExpense : DailyExpense){
         return this.dataServices.DailyExpenses.update(id, dailyExpense);
     }

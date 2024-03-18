@@ -19,6 +19,10 @@ export class GoalUseCases{
         return this.dataServices.Goals.getAll();
     }
 
+    getGoalsByUserId(userId : string){
+        return this.dataServices.Goals.getAllBySpecificColumn('user', userId);
+    }
+
     getGoal(id : string){
         return this.dataServices.Goals.get(id);
     }

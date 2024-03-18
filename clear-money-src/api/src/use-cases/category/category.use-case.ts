@@ -23,6 +23,10 @@ export class CategoryUseCases{
         return this.dataServices.Categories.get(id);
     }
 
+    getCategoriesByUserId(userId : string){
+        return this.dataServices.Categories.getAllBySpecificColumn('user', userId);
+    }
+
     updateCategory(id : string, category : Category){
         return this.dataServices.Categories.update(id, category);
     }

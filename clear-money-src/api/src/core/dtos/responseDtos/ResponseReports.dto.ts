@@ -6,15 +6,30 @@ export class ResponseReportsDto {
         - percentage achieved of each goal
     */ 
 
-    expensesByCategory: { [category: string]: number };
-    revenuesByCategory: { [category: string]: number };
-    dailyExpensesByCategory: { [category: string]: number };
+    totalExpensesByCategory: { 
+        category: string
+        total : number 
+    }[];
+    totalRevenuesByCategory: { 
+        category: string
+        total : number 
+    }[];
+    totalDailyExpensesByCategory: { 
+        category: string
+        total : number 
+    }[];
     userStats: {
         categoriesCount: number;
         expensesCount: number;
         revenuesCount: number;
         dailyExpensesCount: number;
     };
-    totalDailyExpensesByMonth: { [month: string]: number };
-    goalAchievement: { [goal: string]: number };
+    totalDailyExpensesByMonth: { 
+        month: string 
+        total : number 
+    }[];
+    goalsAchievement: { 
+        goal: string,
+        achievement: number 
+    }[];
 }

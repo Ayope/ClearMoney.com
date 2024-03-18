@@ -101,16 +101,21 @@ export class SeederController{
         const savingFrequencyKeys = Object.keys(SavingFrequency);
         const randomSavingFrequencyKey = savingFrequencyKeys[Math.floor(Math.random() * savingFrequencyKeys.length)];
       
-        const createGoalDto : CreateGoalDto = {
-          name: faker.lorem.words(3),
-          description: faker.lorem.sentence(),
-          targeted_amount: parseFloat(faker.finance.amount()),
-          saving_frequency: SavingFrequency[randomSavingFrequencyKey],
-          targeted_date: faker.date.future(),
-          user_id
+        let current_amount = parseFloat(faker.finance.amount());
+
+        const createGoalDto = {
+            name: faker.lorem.words(3),
+            description: faker.lorem.sentence(),
+            targeted_amount: current_amount + Math.abs(parseFloat(faker.finance.amount())),
+            saving_frequency: SavingFrequency[randomSavingFrequencyKey],
+            targeted_date: faker.date.future(),
+            user_id
         };
       
-        return this.GoalFactoryService.createNewGoal(createGoalDto);
+        let goal = this.GoalFactoryService.createNewGoal(createGoalDto);
+        goal.saving_amount = Math.floor(Math.random() * current_amount),
+        goal.current_amount = current_amount;
+        return goal;
     }
 
     private async emptyDatabase(){
