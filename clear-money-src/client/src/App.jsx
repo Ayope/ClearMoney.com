@@ -17,6 +17,7 @@ import UpdateExpenseForm from './features/expenses/pages/UpdateExpense';
 import DailyExpenses from './features/dailyExpenses/pages/DailyExpenses';
 import CreateDailyExpenseForm from './features/dailyExpenses/pages/AddDailyExpense';
 import UpdateDailyExpenseForm from './features/dailyExpenses/pages/UpdateDailyExpense';
+import Categories from './features/categories/pages/Categories';
 
 function App() {  
 
@@ -40,6 +41,8 @@ function App() {
             <Route path="/daily-expenses" element={<DailyExpenses/>}/>
             <Route path="/add-daily-expense" element={<CreateDailyExpenseForm/>}/>
             <Route path="/update-daily-expense/:id" element={<UpdateDailyExpenseForm/>}/>
+
+            <Route path="/categories" element={<Categories/>}/>
 
           </Route>
           <Route path="/register" element={<Register/>}/>

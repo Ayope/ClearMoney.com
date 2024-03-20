@@ -4,12 +4,16 @@ import { useUser } from "@/context/UserContext";
 import ExpenseModal from "./DailyExpense";
 import DeleteModal from "./DeleteDailyExpense";
 import handleErrors from "@/utils/handleErrors";
+import * as flowbite from "flowbite";
 
 export default function DailyExpenses() {
   const { user } = useUser();
   const [dailyExpenses, setDailyExpenses] = useState([]);
   const [filteredDailyExpenses, setFilteredDailyExpenses] = useState([]);
   const [modalExpense, setModalExpense] = useState({});
+
+  flowbite.initDropdowns();
+  flowbite.initModals();
 
   useEffect(() => {
     async function fetchDailyExpenses() {
@@ -18,8 +22,16 @@ export default function DailyExpenses() {
           "GET",
           `api/dailyExpense/user/${user.id}`
         );
-        setDailyExpenses(fetchedDailyExpenses.sort((a, b) => new Date(b.date) - new Date(a.date)));
-        setFilteredDailyExpenses(fetchedDailyExpenses.sort((a, b) => new Date(b.date) - new Date(a.date)));
+        setDailyExpenses(
+          fetchedDailyExpenses.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          )
+        );
+        setFilteredDailyExpenses(
+          fetchedDailyExpenses.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          )
+        );
       } catch (error) {
         handleErrors(error);
       }
@@ -36,11 +48,16 @@ export default function DailyExpenses() {
     setModalExpense(dailyExpense);
   };
 
-  const handleDelete = (dailyExpense) => {
-    const newDailyExpenses = filteredDailyExpenses.filter(
+  const handleDelete = (modalExpense) => {
+    const newFilteredDailyExpenses = filteredDailyExpenses.filter(
       (dailyExpense) => dailyExpense.id !== modalExpense.id
     );
-    setFilteredDailyExpenses(newDailyExpenses);
+    setFilteredDailyExpenses(newFilteredDailyExpenses);
+  
+    const newDailyExpenses = dailyExpenses.filter(
+      (dailyExpense) => dailyExpense.id !== modalExpense.id
+    );
+    setDailyExpenses(newDailyExpenses);
   };
 
   const searchDailyExpenses = (expenseName) => {
@@ -111,7 +128,7 @@ export default function DailyExpenses() {
                       type="text"
                       id="simple-search"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Search"
+                      placeholder="Search by daily expense name"
                       onChange={(e) => {
                         searchDailyExpenses(e.target.value);
                       }}
@@ -178,14 +195,26 @@ export default function DailyExpenses() {
                           : dailyExpense.name}
                       </td>
                       <td className="px-4 py-3">
-                        {dailyExpense.category.name}
+                        <span
+                          style={{
+                            backgroundColor: dailyExpense.category.color,
+                            color: "black",
+                            borderRadius: "20px",
+                            padding: "7px",
+                          }}
+                        >
+                          {dailyExpense.category.name}
+                        </span>
                       </td>
                       <td className="px-4 py-3">
-                      {new Date(dailyExpense.date).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                      })}
+                        {new Date(dailyExpense.date).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                       <td className="px-4 py-3 max-w-[12rem] truncate">
                         {dailyExpense.description}

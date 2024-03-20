@@ -12,6 +12,8 @@ const CreateRevenueForm = () => {
   const { user } = useUser();
   const [showInlineInputs, setShowInlineInputs] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryColor, setNewCategoryColor] = useState("#fff");
+  const [onColorChange, setOnColorChange] = useState(false);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -62,6 +64,7 @@ const CreateRevenueForm = () => {
           try{
             const category = await api("POST", `api/category`, { 
               name: newCategoryName,
+              color : onColorChange ? newCategoryColor : "",
               user_id : user.id
             })
             setCategories([...categories, category]);
@@ -163,14 +166,27 @@ const CreateRevenueForm = () => {
                     Category
                   </label>
                   {showInlineInputs ? (
-                    <input
-                      type="text"
-                      value={newCategoryName}
-                      onChange={handleCategoryInputChange}
-                      onKeyDown={handleCategoryInputKeyDown}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Enter new category and press Enter"
-                    ></input>
+                    <div className="flex gap-3">
+                      <input
+                        type="text"
+                        value={newCategoryName}
+                        onChange={handleCategoryInputChange}
+                        onKeyDown={handleCategoryInputKeyDown}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Enter new category and press Enter"
+                      ></input>
+                      <input
+                        type="color"
+                        value={newCategoryColor}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg"
+                        style={{ height: "40px" }}
+                        onChange={(event) => {
+                          setNewCategoryColor(event.target.value);
+                          setOnColorChange(true);
+                        }}
+                        title="Choose a color for you a category"
+                      />
+                    </div>
                   ) : (
                     <Field
                       as="select"

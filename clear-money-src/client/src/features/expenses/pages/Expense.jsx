@@ -52,7 +52,7 @@ const ExpenseModal = ({ expense }) => {
                 Category
               </dt>
               <dd className="text-sm text-gray-700">
-                {expense.category?.name}
+                {expense.category?.name || 'no category'}
               </dd>
             </div>
           </dl>

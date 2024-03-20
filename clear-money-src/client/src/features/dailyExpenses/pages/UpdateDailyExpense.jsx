@@ -42,7 +42,7 @@ useEffect(() => {
     amount: dailyExpense.amount || "",
     description: dailyExpense.description || "",
     date : dailyExpense.date ? new Date(dailyExpense.date).toISOString().split('T')[0] : '',
-    category: dailyExpense.category ? dailyExpense.category.id : "Select category",
+    category: dailyExpense.category?.id || "Select category",
   };
 
   const validationSchema = Yup.object().shape({

@@ -12,7 +12,7 @@ function DeleteModal({dailyExpense, onDelete}) {
       toast.success(`${dailyExpense.name} deleted successfully`);
       onDelete(dailyExpense);
     }catch(error){
-        handleErrors(error)
+      handleErrors(error)
     }
   };
 

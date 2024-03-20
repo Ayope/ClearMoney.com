@@ -41,7 +41,7 @@ useEffect(() => {
     name: revenue.name || "",
     amount: revenue.amount || "",
     description: revenue.description || "",
-    category: revenue.category ? revenue.category.id : "Select category",
+    category: revenue.category?.id || "Select category",
   };
 
 

@@ -4,12 +4,16 @@ import { useUser } from "@/context/UserContext";
 import ExpenseModal from "./Expense";
 import DeleteModal from "./DeleteExpense";
 import handleErrors from "@/utils/handleErrors";
+import * as flowbite from "flowbite" 
 
 export default function Expenses() {
   const { user } = useUser();
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [modalExpense, setModalExpense] = useState({});
+
+  flowbite.initDropdowns();
+  flowbite.initModals();
 
   useEffect(() => {
     async function fetchExpenses() {
@@ -40,9 +44,12 @@ export default function Expenses() {
     setModalExpense(expense);
   };
 
-  const handleDelete = (expense) => {
-    const newExpenses = filteredExpenses.filter(expense => expense.id !== modalExpense.id)
-    setFilteredExpenses(newExpenses)
+  const handleDelete = (modalExpense) => {
+    const newFilteredExpenses = filteredExpenses.filter((expense) => expense.id !== modalExpense.id)
+    setFilteredExpenses(newFilteredExpenses)
+
+    const newExpenses = expenses.filter((expense) => expense.id !== modalExpense.id)
+    setExpenses(newExpenses)
   }
 
   const searchExpenses = (expenseName) => {
@@ -114,7 +121,7 @@ export default function Expenses() {
               <div className="w-full md:w-1/2">
                 <form className="flex items-center">
                   <label htmlFor="simple-search" className="sr-only">
-                    Search
+                    Search 
                   </label>
                   <div className="relative w-full">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -136,7 +143,7 @@ export default function Expenses() {
                       type="text"
                       id="simple-search"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Search"
+                      placeholder="Search by expense name"
                       onChange={(e) => {searchExpenses(e.target.value)}}
                       required=""
                     />
@@ -197,7 +204,18 @@ export default function Expenses() {
                             "..."
                           : expense.name}
                       </td>
-                      <td className="px-4 py-3">{expense.category.name}</td>
+                      <td className="px-4 py-3">
+                      <span
+                          style={{
+                            backgroundColor: expense.category.color,
+                            color: "black",
+                            borderRadius: "20px",
+                            padding: "7px",
+                          }}
+                        >
+                          {expense.category.name}
+                        </span>
+                      </td>
                       <td className="px-4 py-3 max-w-[12rem] truncate">
                         {expense.description}
                       </td>

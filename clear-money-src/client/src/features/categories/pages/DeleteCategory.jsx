@@ -1,15 +1,16 @@
 import api from "@/utils/api";
 import handleErrors from "@/utils/handleErrors";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function DeleteModal({revenue, onDelete}) {
-
+function DeleteModal({category, onDelete}) {
+  
   const handleDelete = async(id) => {
     try{
-        await api("DELETE", `api/financialTransaction/${id}`)
-        toast.success(`${revenue.name} deleted successfully`);
-        onDelete(revenue);
+      await api("DELETE", `api/category/${id}`)
+      toast.success(`${category.name} deleted successfully`);
+      onDelete(category);
     }catch(error){
         handleErrors(error)
     }
@@ -20,7 +21,7 @@ function DeleteModal({revenue, onDelete}) {
       style={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
-      id="deleteRevenueModal"
+      id="deleteCategoryModal"
       tabIndex="-1"
       aria-hidden="true"
       className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -30,7 +31,7 @@ function DeleteModal({revenue, onDelete}) {
           <button
             type="button"
             className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-toggle="deleteRevenueModal"
+            data-modal-toggle="deleteCategoryModal"
           >
             <svg
               aria-hidden="true"
@@ -61,19 +62,19 @@ function DeleteModal({revenue, onDelete}) {
             />
           </svg>
           <p className="mb-4 text-gray-500 dark:text-gray-300">
-            Are you sure you want to delete <span className="font-bold">{revenue.name}</span>?
+            Are you sure you want to delete <span className="font-bold">{category.name}</span>?
           </p>
           <div className="flex justify-center items-center space-x-4">
             <button
               type="button"
               className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              data-modal-toggle="deleteRevenueModal"
+              data-modal-toggle="deleteCategoryModal"
             >
               No, cancel
             </button>
             <button
-                onClick={() => handleDelete(revenue.id)}
-                data-modal-toggle="deleteRevenueModal"
+                onClick={() => handleDelete(category.id)}
+                data-modal-toggle="deleteCategoryModal"
               className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
             >
               Yes, I'm sure

@@ -52,7 +52,7 @@ const DailyExpenseModal = ({ dailyExpense }) => {
                 Category
               </dt>
               <dd className="text-sm text-gray-700">
-                {dailyExpense.category?.name}
+                {dailyExpense.category?.name || 'no category'} 
               </dd>
             </div>
             <div>

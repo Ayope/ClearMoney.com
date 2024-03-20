@@ -52,7 +52,7 @@ const RevenueModal = ({ revenue }) => {
                 Category
               </dt>
               <dd className="text-sm text-gray-700">
-                {revenue.category?.name}
+                {revenue.category?.name || 'no category'}
               </dd>
             </div>
           </dl>

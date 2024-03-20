@@ -4,12 +4,16 @@ import { useUser } from "@/context/UserContext";
 import RevenueModal from "./Revenue";
 import DeleteModal from "./DeleteRevenue";
 import handleErrors from "@/utils/handleErrors";
+import * as flowbite from "flowbite";
 
 export default function Revenues() {
   const { user } = useUser();
   const [revenues, setRevenues] = useState([]);
   const [filteredRevenues, setFilteredRevenues] = useState([]);
   const [modalRevenue, setModalRevenue] = useState({});
+  
+  flowbite.initDropdowns();
+  flowbite.initModals();
 
   useEffect(() => {
     async function fetchRevenues() {
@@ -21,7 +25,10 @@ export default function Revenues() {
         setRevenues(
           fetchedRevenues.filter((revenue) => revenue.type === "revenue")
         );
-        setFilteredRevenues(fetchedRevenues.filter((revenue) => revenue.type === "revenue"));
+        setFilteredRevenues(
+          fetchedRevenues.filter((revenue) => revenue.type === "revenue")
+        );
+
       } catch (error) {
         handleErrors(error);
       }
@@ -38,65 +45,41 @@ export default function Revenues() {
     setModalRevenue(revenue);
   };
 
-  const handleDelete = (revenue) => {
-    const newRevenues = filteredRevenues.filter(revenue => revenue.id !== modalRevenue.id)
-    setFilteredRevenues(newRevenues)
-  }
+  const handleDelete = (modalRevenue) => {
+    const newFilteredRevenues = filteredRevenues.filter(
+      (revenue) => revenue.id !== modalRevenue.id
+    );    
+    setFilteredRevenues(newFilteredRevenues);
+    
+    const newRevenues = revenues.filter(
+      (revenue) => revenue.id !== modalRevenue.id
+    );
+    setRevenues(newRevenues);
+    
+  };
 
   const searchRevenues = (revenueName) => {
     const filtered = revenues.filter((revenue) => {
       return revenue.name.toLowerCase().includes(revenueName.toLowerCase());
     });
     setFilteredRevenues(filtered);
-  }
-
-
+  };
+  
   return (
     <div>
       <div className="flex items-center justify-center">
-        <div className="mt-2 me-2">
+        <div className="me-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="36"
             height="36"
-            viewBox="0 0 24 24"
+            viewBox="0 0 512 512"
             fill="none"
           >
-                <path
-                  d="M9.5 13.75C9.5 14.72 10.25 15.5 11.17 15.5H13.05C13.85 15.5 14.5 14.82 14.5 13.97C14.5 13.06 14.1 12.73 13.51 12.52L10.5 11.47C9.91 11.26 9.51001 10.94 9.51001 10.02C9.51001 9.17999 10.16 8.48999 10.96 8.48999H12.84C13.76 8.48999 14.51 9.26999 14.51 10.24"
-                  stroke="#292D32"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12 7.5V16.5"
-                  stroke="#292D32"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2"
-                  stroke="#292D32"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M17 3V7H21"
-                  stroke="#292D32"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M22 2L17 7"
-                  stroke="#292D32"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+            <path
+              fill="currentColor"
+              d="M258 21.89c-.5 0-1.2 0-1.8.12c-4.6.85-10.1 5.1-13.7 14.81c-3.8 9.7-4.6 23.53-1.3 38.34c3.4 14.63 10.4 27.24 18.2 34.94c7.6 7.7 14.5 9.8 19.1 9c4.8-.7 10.1-5.1 13.7-14.7c3.8-9.64 4.8-23.66 1.4-38.35c-3.5-14.8-10.4-27.29-18.2-34.94c-6.6-6.8-12.7-9.22-17.4-9.22M373.4 151.4c-11 .3-24.9 3.2-38.4 8.9c-15.6 6.8-27.6 15.9-34.2 24.5c-6.6 8.3-7.2 14.6-5.1 18.3c2.2 3.7 8.3 7.2 20 7.7c11.7.7 27.5-2.2 43-8.8c15.5-6.7 27.7-15.9 34.3-24.3c6.6-8.3 7.1-14.8 5-18.5c-2.1-3.8-8.3-7.1-20-7.5c-1.6-.3-3-.3-4.6-.3m-136.3 92.9c-6.6.1-12.6.9-18 2.3c-11.8 3-18.6 8.4-20.8 14.9c-2.5 6.5 0 14.3 7.8 22.7c8.2 8.2 21.7 16.1 38.5 20.5c16.7 4.4 32.8 4.3 44.8 1.1c12.1-3.1 18.9-8.6 21.1-15c2.3-6.5 0-14.2-8.1-22.7c-7.9-8.2-21.4-16.1-38.2-20.4c-9.5-2.5-18.8-3.5-27.1-3.4m160.7 58.1L336 331.7c4.2.2 14.7.5 14.7.5l6.6 8.7l54.7-28.5zm-54.5.1l-57.4 27.2c5.5.3 18.5.5 23.7.8l49.8-23.6zm92.6 10.8l-70.5 37.4l14.5 18.7l74.5-44.6zm-278.8 9.1a40.33 40.33 0 0 0-9 1c-71.5 16.5-113.7 17.9-126.2 17.9H18v107.5s11.6-1.7 30.9-1.8c37.3 0 103 6.4 167 43.8c3.4 2.1 10.7 2.9 19.8 2.9c24.3 0 61.2-5.8 69.7-9C391 452.6 494 364.5 494 364.5l-32.5-28.4s-79.8 50.9-89.9 55.8c-91.1 44.7-164.9 16.8-164.9 16.8s119.9 3 158.4-27.3l-22.6-34s-82.8-2.3-112.3-6.2c-15.4-2-48.7-18.8-73.1-18.8"
+            />
           </svg>
         </div>
         <h1 className="text-3xl font-bold text-center mt-6 mb-4 mr-2">
@@ -133,7 +116,9 @@ export default function Revenues() {
                       id="simple-search"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Search by revenue name"
-                      onChange={(e) => {searchRevenues(e.target.value)}}
+                      onChange={(e) => {
+                        searchRevenues(e.target.value);
+                      }}
                       required=""
                     />
                   </div>
@@ -193,7 +178,18 @@ export default function Revenues() {
                             "..."
                           : revenue.name}
                       </td>
-                      <td className="px-4 py-3">{revenue.category.name}</td>
+                      <td className="px-4 py-3">
+                      <span
+                          style={{
+                            backgroundColor: revenue.category.color,
+                            color: "black",
+                            borderRadius: "20px",
+                            padding: "7px",
+                          }}
+                        >
+                          {revenue.category.name}
+                        </span>
+                      </td>
                       <td className="px-4 py-3 max-w-[12rem] truncate">
                         {revenue.description}
                       </td>
@@ -312,7 +308,7 @@ export default function Revenues() {
       </section>
 
       <RevenueModal revenue={modalRevenue} />
-        <DeleteModal revenue={modalRevenue} onDelete={handleDelete}/>
+      <DeleteModal revenue={modalRevenue} onDelete={handleDelete} />
     </div>
   );
 }
