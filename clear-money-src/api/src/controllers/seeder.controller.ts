@@ -46,11 +46,11 @@ export class SeederController{
         return passwordArray.sort(() => Math.random() - 0.5).join('');
     }
 
-    private generateFakeUser(i:number) : User {
+    private generateFakeUser() : User {
         return {
             first_name: faker.person.firstName(),
             last_name: faker.person.lastName(),
-            email: faker.internet.email() + i,
+            email: faker.internet.email(),
             password: this.generatePassword(),
             authServiceID : null
         }
@@ -134,7 +134,7 @@ export class SeederController{
         
         for(let i=1; i<=count; i++){
             
-            const user = this.generateFakeUser(i);
+            const user = this.generateFakeUser();
             
             const authUser = await this.authUseCases.signup(user.email, user.password);
             

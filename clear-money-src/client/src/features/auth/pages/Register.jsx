@@ -5,7 +5,7 @@ import registerSchema from "../schemas/RegisterSchema";
 import api from "@/utils/api";
 import WithDocumentTitle from "@/HOCs/WithDocumentTitle";
 import handleAuthData from "../helpers/handleAuthData";
-import handleAuthErrors from "../helpers/handleAuthErrors";
+import handleAuthErrors from "@/utils/handleErrors";
 import { UserContext } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";

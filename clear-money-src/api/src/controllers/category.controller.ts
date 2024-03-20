@@ -70,11 +70,11 @@ export class CategoryController{
         return this.createResponseCategory(createdCategory);
     }
 
-    @Get()
+    @Get('user/:user_id')
     @ApiOperation({ summary: 'Get all categories' })
     @ApiResponse({ status: 200, description: 'Returns all categories.', type: [ResponseCategoryDto] })
-    async getAllCategories() : Promise<ResponseCategoryDto[]> {
-        const categories = await this.CategoryUseCases.getAllCategories();
+    async getAllCategories(@Param('user_id') userId : string) : Promise<ResponseCategoryDto[]> {
+        const categories = await this.CategoryUseCases.getCategoriesByUserId(userId);
         return categories.map(category => this.createResponseCategory(category));
     }
 

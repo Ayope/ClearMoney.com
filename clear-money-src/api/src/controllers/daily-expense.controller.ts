@@ -99,11 +99,11 @@ export class DailyExpenseController{
 
     }
 
-    @Get()
+    @Get("user/:userId")
     @ApiOperation({ summary: 'Get all daily expenses' })
     @ApiResponse({ status: 200, description: 'Returns all daily expenses.', type: [ResponseDailyExpenseDto] })
-    async getAllDailyExpenses() : Promise<ResponseDailyExpenseDto[]> {
-        const dailyExpenses = await this.DailyExpenseUseCases.getAllDailyExpenses();
+    async getAllDailyExpenses(@Param("userId") userId : string) : Promise<ResponseDailyExpenseDto[]> {
+        const dailyExpenses = await this.DailyExpenseUseCases.getDailyExpensesByUserId(userId);
         return dailyExpenses.map(DailyExpense => this.createResponseDailyExpense(DailyExpense));
     }
 

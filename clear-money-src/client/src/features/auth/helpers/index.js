@@ -1,2 +1,2 @@
 export * from "./handleAuthData";
-export * from "./handleAuthErrors";
+export * from "../../../utils/handleErrors";

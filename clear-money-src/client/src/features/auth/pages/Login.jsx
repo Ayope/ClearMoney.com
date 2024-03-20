@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import api from "@/utils/api";
 import handleAuthData from "../helpers/handleAuthData";
-import handleAuthErrors from "../helpers/handleAuthErrors";
+import handleErrors from "@/utils/handleErrors";
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +21,7 @@ function LogIn() {
       const data = await api("POST", "api/auth/login", values);
       handleAuthData(data, setUser, navigate);
     } catch (error) {
-      handleAuthErrors(error);
+      handleErrors(error);
     }
   };
 

@@ -97,11 +97,11 @@ export class FinancialTransactionController{
 
     }
 
-    @Get()
+    @Get('user/:user_id')
     @ApiOperation({ summary: 'Get all Financial Transactions' })
     @ApiResponse({ status: 200, description: 'Returns all Financial Transactions.', type: [ResponseFinancialTransactionDto] })
-    async getAllFinancialTransactions() : Promise<ResponseFinancialTransactionDto[]> {
-        const financialTransaction = await this.FinancialTransactionUseCases.getAllFinancialTransactions();
+    async getAllFinancialTransactions(@Param('user_id') userId : string) : Promise<ResponseFinancialTransactionDto[]> {
+        const financialTransaction = await this.FinancialTransactionUseCases.getFinancialTransactionsByUserId(userId);
         return financialTransaction.map(financialTransaction => this.createResponseFinancialTransaction(financialTransaction));
     }
 

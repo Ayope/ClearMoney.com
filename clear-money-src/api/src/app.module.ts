@@ -1,5 +1,5 @@
 import { CategoryUseCasesModule } from './use-cases/category/category-use-cases.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthController } from './controllers';
 import { DataServicesModule } from './services/data-services/data-services.module'; 
 import { ConfigModule } from '@nestjs/config';
@@ -15,6 +15,7 @@ import { GoalModule } from './use-cases/goal/goal-use-cases.module';
 import { GoalController } from './controllers/goal.controller';
 import { ReportsController } from './controllers/reports.controller';
 import { SeederController } from './controllers/seeder.controller';
+import { TokenMiddleware } from './middlewares/token.middleware';
 
 @Module({
   imports: [
@@ -39,4 +40,16 @@ import { SeederController } from './controllers/seeder.controller';
   ],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TokenMiddleware)
+      .forRoutes(
+        // { path: 'api/category/*', method: RequestMethod.ALL },
+        // { path: 'api/financialTransaction/*', method: RequestMethod.ALL },
+        // { path: 'api/dailyExpense/*', method: RequestMethod.ALL },
+        // { path: 'api/goal/*', method: RequestMethod.ALL },
+        // { path: 'api/reports/*', method: RequestMethod.ALL },
+      );  
+  }
+}

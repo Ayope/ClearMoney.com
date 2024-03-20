@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export default function handleAuthErrors(error){
+export default function handleErrors(error){
     
     if(error.response){
         
