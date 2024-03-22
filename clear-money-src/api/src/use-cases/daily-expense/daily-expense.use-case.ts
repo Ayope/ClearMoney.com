@@ -19,6 +19,10 @@ export class DailyExpenseUseCases{
         return this.dataServices.DailyExpenses.getAll();
     }
 
+    getAllDailyExpensesByCategory(category : string){
+        return this.dataServices.DailyExpenses.getAllBySpecificColumn('category', category);
+    }
+
     getDailyExpense(id : string){
         return this.dataServices.DailyExpenses.get(id);
     }

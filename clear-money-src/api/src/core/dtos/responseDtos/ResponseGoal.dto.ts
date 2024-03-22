@@ -18,6 +18,9 @@ export class ResponseGoalDto {
   @ApiProperty({ description: 'The saving frequency for the goal' })
   saving_frequency: SavingFrequency;
 
+  @ApiProperty({ description: 'The starting date for the goal' })
+  starting_date: Date;
+
   @ApiProperty({ description: 'The targeted date for the goal' })
   targeted_date: Date;
 

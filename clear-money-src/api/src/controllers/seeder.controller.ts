@@ -59,6 +59,7 @@ export class SeederController{
     private generateFakeCategory(user_id : string) : Category{
         const categoryDto : CreateCategoryDto = {
             name: faker.commerce.department(),
+            color : faker.color.rgb(),
             user_id
         }
 
@@ -107,6 +108,7 @@ export class SeederController{
             name: faker.lorem.words(3),
             description: faker.lorem.sentence(),
             targeted_amount: current_amount + Math.abs(parseFloat(faker.finance.amount())),
+            starting_date: faker.date.past(),
             saving_frequency: SavingFrequency[randomSavingFrequencyKey],
             targeted_date: faker.date.future(),
             user_id
@@ -127,7 +129,7 @@ export class SeederController{
         await this.GoalUseCases.deleteAllGoals();
     }
 
-    @Post()
+    @Get()
     async seed(@Query("count") count: number){
 
         await this.emptyDatabase();

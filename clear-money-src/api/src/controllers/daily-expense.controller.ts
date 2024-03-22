@@ -37,6 +37,7 @@ export class DailyExpenseController{
             category: {
                 id: DailyExpense.category?._id,
                 name: DailyExpense.category?.name,
+                color: DailyExpense.category?.color,
                 user: {
                     id: DailyExpense.user.id,
                     first_name: DailyExpense.user.first_name,

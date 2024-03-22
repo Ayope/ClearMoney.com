@@ -8,6 +8,7 @@ export class Goal {
     current_amount : number
     saving_amount : number
     saving_frequency : SavingFrequency
+    starting_date : Date
     targeted_date : Date
     user : User
 }

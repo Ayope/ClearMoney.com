@@ -1,8 +1,10 @@
+import { DailyExpenseUseCases } from '@/use-cases/daily-expense/daily-expense.use-case';
 import { Category } from "@/core";
 import { CreateCategoryDto, UpdateCategoryDto } from "@/core/dtos";
 import { ResponseCategoryDto } from "@/core/dtos/responseDtos/ResposneCategory.dto";
 import { CategoryFactoryService } from "@/use-cases/category/category-factory.service";
 import { CategoryUseCases } from "@/use-cases/category/category.use-case";
+import { FinancialTransactionUseCases } from "@/use-cases/financial-transaction/financial-transaction.use-case";
 import { UserUseCases } from "@/use-cases/user/user.use-case";
 import { Controller, Post, Get, Body, BadRequestException, Param, Delete, Put, NotFoundException } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
@@ -15,6 +17,8 @@ export class CategoryController{
     constructor(
         private CategoryUseCases : CategoryUseCases,
         private CategoryFactoryService : CategoryFactoryService,
+        private FinancialTransactionUseCases : FinancialTransactionUseCases,
+        private DailyExpenseUseCases : DailyExpenseUseCases,
         private UserUseCases : UserUseCases
     ){
         this.responseCategory = new ResponseCategoryDto();
@@ -28,6 +32,7 @@ export class CategoryController{
         return {
             id : category.id,
             name: category.name,
+            color : category.color,
             user: {
                 id: category.user.id,
                 first_name: category.user.first_name,
@@ -113,7 +118,14 @@ export class CategoryController{
     @ApiResponse({ status: 200, description: 'The category has been successfully deleted.', type: ResponseCategoryDto })
     @ApiResponse({ status: 404, description: 'Category not found.' })
     async deleteCategory(@Param('id') id: string) : Promise<ResponseCategoryDto> {
-        const category = await this.CategoryUseCases.deleteCategory(id);
-        return this.createResponseCategory(category);
+        const financialTransactions = await this.FinancialTransactionUseCases.getAllFinancialTransactionsByCategory(id);
+        const dailyExpenses = await this.DailyExpenseUseCases.getAllDailyExpensesByCategory(id);
+
+        if(financialTransactions.length === 0 && dailyExpenses.length === 0){
+            const category = await this.CategoryUseCases.deleteCategory(id);
+            return this.createResponseCategory(category);
+        }else {
+            throw new BadRequestException('Category is being used by a revenue, expense or daily expense !');
+        }
     }
 }

@@ -12,6 +12,7 @@ export class GoalFactoryService {
         newGoal.description = CreateGoalDto.description;
         newGoal.targeted_amount = CreateGoalDto.targeted_amount;
         newGoal.saving_frequency = CreateGoalDto.saving_frequency;
+        newGoal.starting_date = new Date(CreateGoalDto.starting_date);
         newGoal.targeted_date = new Date(CreateGoalDto.targeted_date);
         newGoal.user = CreateGoalDto.user_id;
 

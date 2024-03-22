@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import CreateCategoryModal from "./AddCategory";
 
 export default function Categories() {
+  flowbite.initModals();
   const { user } = useUser();
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -75,6 +76,15 @@ export default function Categories() {
   };
 
   const handleCategoryInputKeyDown = async (e) => {
+    if(e.key === "Escape"){
+      setShowCategoryInput(false);
+      setOnColorChange(false);
+      setCategoryToUpdate({});
+      setNewCategoryName("");
+      setNewCategoryColor("");
+      return;
+    }
+
     if (e.key === "Enter") {
       e.preventDefault();
       if (newCategoryName.trim() !== "" || onColorChange === true) {
@@ -116,6 +126,7 @@ export default function Categories() {
             setShowCategoryInput(false);
             setOnColorChange(false);
             setCategoryToUpdate({});
+            setNewCategoryColor("");
             toast.success("Category updated successfully");
           } catch (error) {
             handleErrors(error);
@@ -263,7 +274,7 @@ export default function Categories() {
                               backgroundColor: category.color,
                               color: "black",
                               borderRadius: "20px",
-                              padding: "7px",
+                              padding: "4px 10px",
                               cursor: "pointer",
                             }}
                             onDoubleClick={() => {

@@ -24,6 +24,9 @@ export class Goal {
   saving_frequency: SavingFrequency;
 
   @Prop({ required : true })
+  starting_date: Date;
+
+  @Prop({ required : true })
   targeted_date: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })

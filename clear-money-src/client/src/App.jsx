@@ -18,6 +18,10 @@ import DailyExpenses from './features/dailyExpenses/pages/DailyExpenses';
 import CreateDailyExpenseForm from './features/dailyExpenses/pages/AddDailyExpense';
 import UpdateDailyExpenseForm from './features/dailyExpenses/pages/UpdateDailyExpense';
 import Categories from './features/categories/pages/Categories';
+import PageNotFound from './features/404';
+import Goals from './features/goals/pages/Goals';
+import CreateGoalForm from './features/goals/pages/AddGoal';
+import UpdateGoalForm from './features/goals/pages/UpdateGoal';
 
 function App() {  
 
@@ -44,6 +48,11 @@ function App() {
 
             <Route path="/categories" element={<Categories/>}/>
 
+            <Route path="/goals" element={<Goals/>}/>
+            <Route path="/add-goal" element={<CreateGoalForm/>}/>
+            <Route path="/update-goal/:id" element={<UpdateGoalForm/>}/>
+
+            <Route path="*" element={<PageNotFound/>}/>
           </Route>
           <Route path="/register" element={<Register/>}/>
           <Route path="/login" element={<LoginIn/>}/>

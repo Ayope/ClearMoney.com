@@ -19,6 +19,10 @@ export class FinancialTransactionUseCases{
         return this.dataServices.FinancialTransactions.getAll();
     }
 
+    getAllFinancialTransactionsByCategory(category : string){
+        return this.dataServices.FinancialTransactions.getAllBySpecificColumn('category', category);
+    }
+
     getFinancialTransaction(id : string){
         return this.dataServices.FinancialTransactions.get(id);
     }

@@ -7,6 +7,9 @@ export class ResponseCategoryDto {
     @ApiProperty({ description: 'The name of the category' })
     name : string
 
+    @ApiProperty({ description: 'The color of the category' })
+    color : string
+    
     @ApiProperty({
         description: 'The user of the financial transaction',
         type: 'object',

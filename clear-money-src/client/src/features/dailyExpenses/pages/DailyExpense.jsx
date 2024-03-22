@@ -51,8 +51,17 @@ const DailyExpenseModal = ({ dailyExpense }) => {
               <dt className="text-lg font-semibold text-gray-900">
                 Category
               </dt>
-              <dd className="text-sm text-gray-700">
-                {dailyExpense.category?.name || 'no category'} 
+              <dd className="text-sm text-gray-700 mt-1">
+                <span
+                  style={{
+                    backgroundColor: dailyExpense.category?.color,
+                    color: "black",
+                    borderRadius: "20px",
+                    padding: "4px 10px",
+                  }}
+                >
+                  {dailyExpense.category?.name || 'no category'}
+                </span> 
               </dd>
             </div>
             <div>

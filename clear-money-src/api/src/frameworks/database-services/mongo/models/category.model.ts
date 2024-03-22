@@ -7,6 +7,9 @@ export class Category {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true })
+  color: string;
+
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: User;
 }

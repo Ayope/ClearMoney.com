@@ -13,7 +13,6 @@ export class CreateGoalDto {
 
   @ApiProperty({ description: 'The description of the goal' })
   @IsString()
-  @IsNotEmpty()
   description: string;
 
   @ApiProperty({ description: 'The targeted amount for the goal' })
@@ -25,6 +24,12 @@ export class CreateGoalDto {
   @IsEnum(SavingFrequency)
   @IsNotEmpty()
   saving_frequency: SavingFrequency;
+
+  @ApiProperty({ description: 'The starting date for the goal' })
+  @IsDate()
+  @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
+  starting_date: Date;
 
   @ApiProperty({ description: 'The targeted date for the goal' })
   @IsDate()

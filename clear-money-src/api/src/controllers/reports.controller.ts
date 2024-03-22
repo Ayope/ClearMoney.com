@@ -5,7 +5,9 @@ import { GoalUseCases } from '@/use-cases/goal/goal.use-case';
 import { Controller, Param, Get } from '@nestjs/common';
 import { ResponseReportsDto } from '@/core/dtos/responseDtos/ResponseReports.dto';
 import FinancialType from '@/core/enums/financial-type.enum';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
+@ApiTags('Reports')
 @Controller('api/reports')
 export class ReportsController {
 
@@ -31,23 +33,22 @@ export class ReportsController {
     
         financialTransactions.forEach(transaction => {
             let category = transaction.category.name;
-            let amount = transaction.amount;
             
             if (transaction.type === FinancialType.Expense) {
                 expensesCount++;
                 let expenseCategory = totalExpensesByCategory.find(e => e.category === category);
                 if (expenseCategory) {
-                    expenseCategory.total += amount;
+                    expenseCategory.total += 1;
                 } else {
-                    totalExpensesByCategory.push({ category: category, total: amount });
+                    totalExpensesByCategory.push({ category: category, total: 1 });
                 }
             } else if (transaction.type === FinancialType.Revenue) {
                 revenuesCount++;
                 let revenueCategory = totalRevenuesByCategory.find(r => r.category === category);
                 if (revenueCategory) {
-                    revenueCategory.total += amount;
+                    revenueCategory.total += 1;
                 } else {
-                    totalRevenuesByCategory.push({ category: category, total: amount });
+                    totalRevenuesByCategory.push({ category: category, total: 1 });
                 }
             }
         });
@@ -67,20 +68,19 @@ export class ReportsController {
             
             let month = dailyExpense.date.toLocaleString('default', { month: 'long', year: 'numeric' });
             let category = dailyExpense.category.name;
-            let amount = dailyExpense.amount;
                         
             let expenseCategory = totalDailyExpensesByCategory.find(e => e.category === category);
             if (expenseCategory) {
-                expenseCategory.total += amount;
+                expenseCategory.total += 1;
             } else {
-                totalDailyExpensesByCategory.push({ category: category, total: amount });
+                totalDailyExpensesByCategory.push({ category: category, total: 1 });
             }
 
             let monthExpense = totalDailyExpensesByMonth.find(m => m.month === month);
             if (monthExpense) {
-                monthExpense.total += amount;
+                monthExpense.total += 1;
             } else {
-                totalDailyExpensesByMonth.push({ month: month, total: amount });
+                totalDailyExpensesByMonth.push({ month: month, total: 1 });
             }            
         });
 
@@ -109,6 +109,10 @@ export class ReportsController {
     }
 
     @Get(":userId")
+    @ApiOperation({ summary: 'Get reports for a specific user' })
+    @ApiResponse({ status: 200, description: 'The reports have been successfully retrieved.', type: ResponseReportsDto })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
+    @ApiParam({ name: 'userId', description: 'The ID of the user', required: true, type: String })
     async getReports(@Param("userId") userId: string) : Promise<ResponseReportsDto> {
         
         const { totalExpensesByCategory, totalRevenuesByCategory, expensesCount, revenuesCount} = await this.financialTransactionsReports(userId);

@@ -37,6 +37,7 @@ export class FinancialTransactionController{
             category: {
                 id: FinancialTransaction.category?._id,
                 name: FinancialTransaction.category?.name,
+                color: FinancialTransaction.category?.color,
                 user: {
                     id: FinancialTransaction.user.id,
                     first_name: FinancialTransaction.user.first_name,

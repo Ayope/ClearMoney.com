@@ -184,7 +184,7 @@ export default function Revenues() {
                             backgroundColor: revenue.category.color,
                             color: "black",
                             borderRadius: "20px",
-                            padding: "7px",
+                            padding: "4px 10px",
                           }}
                         >
                           {revenue.category.name}

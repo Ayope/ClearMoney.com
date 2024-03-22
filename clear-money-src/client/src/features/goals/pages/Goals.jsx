@@ -1,102 +1,133 @@
 import api from "@/utils/api";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
-import ExpenseModal from "./DailyExpense";
-import DeleteModal from "./DeleteDailyExpense";
+import GoalModal from "./Goal";
+import DeleteModal from "./DeleteGoal";
 import handleErrors from "@/utils/handleErrors";
 import * as flowbite from "flowbite";
+import ProgressBar from "@ramonak/react-progress-bar";
 
-export default function DailyExpenses() {
+export default function Goals() {
   const { user } = useUser();
-  const [dailyExpenses, setDailyExpenses] = useState([]);
-  const [filteredDailyExpenses, setFilteredDailyExpenses] = useState([]);
-  const [modalExpense, setModalExpense] = useState({});
+  const [goals, setGoals] = useState([]);
+  const [filteredGoals, setFilteredGoals] = useState([]);
+  const [modalGoal, setModalGoal] = useState({});
 
   flowbite.initDropdowns();
   flowbite.initModals();
 
   useEffect(() => {
-    async function fetchDailyExpenses() {
+    async function fetchGoals() {
       try {
-        const fetchedDailyExpenses = await api(
-          "GET",
-          `api/dailyExpense/user/${user.id}`
-        );
-        setDailyExpenses(
-          fetchedDailyExpenses.sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-          )
-        );
-        setFilteredDailyExpenses(
-          fetchedDailyExpenses.sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-          )
-        );
+        const fetchedGoals = await api("GET", `api/goal/user/${user.id}`);
+        console.log(fetchedGoals);
+        setGoals(fetchedGoals);
+        setFilteredGoals(fetchedGoals);
       } catch (error) {
         handleErrors(error);
       }
     }
 
-    fetchDailyExpenses();
+    fetchGoals();
   }, []);
 
-  const handlePreviewClick = (dailyExpense) => {
-    setModalExpense(dailyExpense);
+  const handlePreviewClick = (goal) => {
+    setModalGoal(goal);
   };
 
-  const handleDeleteClick = (dailyExpense) => {
-    setModalExpense(dailyExpense);
+  const handleDeleteClick = (goal) => {
+    setModalGoal(goal);
   };
 
-  const handleDelete = (modalExpense) => {
-    const newFilteredDailyExpenses = filteredDailyExpenses.filter(
-      (dailyExpense) => dailyExpense.id !== modalExpense.id
+  const handleDelete = (modalGoal) => {
+    const newFilteredGoals = filteredGoals.filter(
+      (goal) => goal.id !== modalGoal.id
     );
-    setFilteredDailyExpenses(newFilteredDailyExpenses);
-  
-    const newDailyExpenses = dailyExpenses.filter(
-      (dailyExpense) => dailyExpense.id !== modalExpense.id
-    );
-    setDailyExpenses(newDailyExpenses);
+    setFilteredGoals(newFilteredGoals);
+
+    const newGoals = goals.filter((goal) => goal.id !== modalGoal.id);
+    setGoals(newGoals);
   };
 
-  const searchDailyExpenses = (expenseName) => {
-    const filtered = dailyExpenses.filter((dailyExpense) => {
-      return dailyExpense.name
-        .toLowerCase()
-        .includes(expenseName.toLowerCase());
+  const searchGoals = (goalName) => {
+    const filtered = goals.filter((goal) => {
+      return goal.name.toLowerCase().includes(goalName.toLowerCase());
     });
-    setFilteredDailyExpenses(filtered);
+    setFilteredGoals(filtered);
   };
+
+  const checkIfUserSavedForCurrentMonthOrYear = (goal) => {
+    
+    const starting_date = new Date(goal.starting_date);
+    let current_date = new Date();
+
+    const saving_amount = goal.saving_amount;
+    const saving_frequency = goal.saving_frequency;
+    const current_amount = goal.current_amount;
+
+    if(saving_frequency === "yearly") {
+      const years = current_date.getFullYear() - starting_date.getFullYear() + 1;
+      return years * saving_amount > current_amount;
+    }else {
+      const years = current_date.getFullYear() - starting_date.getFullYear();
+      const months = current_date.getMonth() - starting_date.getMonth() + 1;
+      return (months + (years * 12)) * saving_amount > current_amount;
+    }
+    /*
+      (saving amount = 12) * (starting_date - current date = 10 ) = 120 <= the amount that should be saved 
+      => (current amount < the amount that should be saved ? you should save for the current month or year : you saved you're ok)      
+    */
+  }
+
+  const saveForTheCurrentPeriod = (goal) => {
+    try{
+      const newCurrentAmount = goal.current_amount + goal.saving_amount;
+      api("PUT", `api/goal/${goal.id}`, {
+        ...goal,
+        current_amount: newCurrentAmount,
+        user_id : user.id
+      });
+      const newGoals = goals.map((g) => {
+        if(g.id === goal.id) {
+          g.current_amount = newCurrentAmount;
+        }
+        return g;
+      });
+      setGoals(newGoals);
+      setFilteredGoals(newGoals);
+    }catch(error){
+      handleErrors(error);
+    }
+  }
 
   return (
     <div>
       <div className="flex items-center justify-center">
-        <div className="mt-2 me-2">
+        <div className="me-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="36"
-            height="36"
-            viewBox="0 0 24 24"
+            width="50"
+            height="50"
+            viewBox="0 0 20 20"
             fill="none"
+            style={{ transform: "translateY(10px)" }}
           >
             <path
-              fill="currentColor"
-              d="M6.94 2c.416 0 .753.324.753.724v1.46c.668-.012 1.417-.012 2.26-.012h4.015c.842 0 1.591 0 2.259.013v-1.46c0-.4.337-.725.753-.725s.753.324.753.724V4.25c1.445.111 2.394.384 3.09 1.055c.698.67.982 1.582 1.097 2.972L22 9H2v-.724c.116-1.39.4-2.302 1.097-2.972c.697-.67 1.645-.944 3.09-1.055V2.724c0-.4.337-.724.753-.724"
+              fill="#6B7280"
+              d="m13.637 2.363l1.676.335c.09.018.164.084.19.173a.25.25 0 0 1-.062.249l-1.373 1.374a.876.876 0 0 1-.619.256H12.31L9.45 7.611A1.5 1.5 0 1 1 6.5 8a1.501 1.501 0 0 1 1.889-1.449l2.861-2.862V2.552c0-.232.092-.455.256-.619L12.88.559a.25.25 0 0 1 .249-.062c.089.026.155.1.173.19Z"
             />
             <path
-              fill="currentColor"
-              d="M22 14v-2c0-.839-.004-2.335-.017-3H2.01c-.013.665-.01 2.161-.01 3v2c0 3.771 0 5.657 1.172 6.828C4.343 22 6.228 22 10 22h4c3.77 0 5.656 0 6.828-1.172C22 19.658 22 17.772 22 14"
-              opacity="0.5"
+              fill="#6B7280"
+              d="M2 8a6 6 0 1 0 11.769-1.656a.751.751 0 1 1 1.442-.413a7.502 7.502 0 0 1-12.513 7.371A7.501 7.501 0 0 1 10.069.789a.75.75 0 0 1-.413 1.442A6.001 6.001 0 0 0 2 8"
             />
             <path
-              fill="currentColor"
-              d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0"
+              fill="#6B7280"
+              d="M5 8a3.002 3.002 0 0 0 4.699 2.476a3 3 0 0 0 1.28-2.827a.748.748 0 0 1 1.045-.782a.75.75 0 0 1 .445.61A4.5 4.5 0 1 1 8.516 3.53a.75.75 0 1 1-.17 1.49A3 3 0 0 0 5 8"
             />
           </svg>
         </div>
         <h1 className="text-3xl font-bold text-center mt-6 mb-4 mr-2">
-          Manage Daily Expenses
+          Manage Goals
         </h1>
       </div>
       <section className="sm:p-5 antialiased">
@@ -128,9 +159,9 @@ export default function DailyExpenses() {
                       type="text"
                       id="simple-search"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Search by daily expense name"
+                      placeholder="Search by goal name"
                       onChange={(e) => {
-                        searchDailyExpenses(e.target.value);
+                        searchGoals(e.target.value);
                       }}
                       required=""
                     />
@@ -140,7 +171,7 @@ export default function DailyExpenses() {
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <a
                   type="button"
-                  href="/add-daily-expense"
+                  href="/add-goal"
                   className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 >
                   <svg
@@ -156,7 +187,7 @@ export default function DailyExpenses() {
                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                     />
                   </svg>
-                  Add daily expense
+                  Add goal
                 </a>
               </div>
             </div>
@@ -165,68 +196,77 @@ export default function DailyExpenses() {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" className="px-4 py-4">
-                      Daily Expense
-                    </th>
-                    <th scope="col" className="px-4 py-3">
-                      Category
-                    </th>
-                    <th scope="col" className="px-4 py-3">
-                      Date
+                      Goal
                     </th>
                     <th scope="col" className="px-4 py-3">
                       Description
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Amount
+                      Target date
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      To Save
+                    </th>
+                    <th scope="col" className="px-16 py-3">
+                      Progress
+                    </th>
+                    <th scope="col" className="px-16 py-3">
+                      Save 
                     </th>
                     <th scope="col" className="px-4 py-3"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredDailyExpenses.map((dailyExpense) => (
-                    <tr
-                      key={dailyExpense.id}
-                      className="border-b dark:border-gray-700"
-                    >
+                  {filteredGoals.map((goal) => (
+                    <tr key={goal.id} className="border-b dark:border-gray-700">
                       <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {dailyExpense.name.split(" ").length > 2
-                          ? dailyExpense.name.split(" ").slice(0, 2).join(" ") +
+                        {goal.name.split(" ").length > 2
+                          ? goal.name.split(" ").slice(0, 2).join(" ") + "..."
+                          : goal.name}
+                      </td>
+                      <td className="px-4 py-3">
+                        {goal.description.split(" ").length > 5
+                          ? goal.description.split(" ").slice(0, 5).join(" ") +
                             "..."
-                          : dailyExpense.name}
+                          : goal.description}
+                      </td>
+                      <td className="px-4 py-3">{new Date(goal.targeted_date).toLocaleDateString("en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })}
                       </td>
                       <td className="px-4 py-3">
-                        <span
-                          style={{
-                            backgroundColor: dailyExpense.category.color,
-                            color: "black",
-                            borderRadius: "20px",
-                            padding: "4px 10px",
-                          }}
-                        >
-                          {dailyExpense.category.name}
-                        </span>
+                        ${goal.saving_amount.toFixed(2) + " every " + (goal.saving_frequency === "yearly" ? "year" : "month")}
                       </td>
                       <td className="px-4 py-3">
-                        {new Date(dailyExpense.date).toLocaleDateString(
-                          "en-GB",
-                          {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          }
-                        )}
+                        <ProgressBar 
+                          completed={goal.targeted_amount === 0 ? 0 : Math.round((goal.current_amount / goal.targeted_amount) * 100)}
+                          bgColor="#6d28d9"
+                          height="15px"
+                          width="100%"
+                          borderRadius="30px"
+                          labelAlignment="outside"
+                          baseBgColor="#dedddd"
+                          labelColor="#000000"
+                          transitionDuration=""
+                          animateOnRender
+                          maxCompleted={100}
+                        />
                       </td>
-                      <td className="px-4 py-3 max-w-[12rem] truncate">
-                        {dailyExpense.description}
+                      <td className="px-4 py-3 text-center">
+                        {Math.round((goal.current_amount / goal.targeted_amount) * 100) === 100 
+                          ? <strong>Goal completed successfully 🎉</strong> 
+                          : checkIfUserSavedForCurrentMonthOrYear(goal) === true 
+                            ? <button onClick={() => saveForTheCurrentPeriod(goal)} type="button" className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">{"save for this " + (goal.saving_frequency === "yearly" ? "year" : "month")}</button> 
+                            : <strong>{"You saved for this " + (goal.saving_frequency === "yearly" ? "year ✔" : "month ✔")}</strong>
+                        }
                       </td>
-                      <td className="px-4 py-3">
-                        ${dailyExpense.amount.toFixed(2)}
-                      </td>
-
                       <td className="px-4 py-3 flex items-center justify-end">
                         <button
-                          id={`dropdown-button-${dailyExpense.id}`}
-                          data-dropdown-toggle={`dropdown-${dailyExpense.id}`}
+                          id={`dropdown-button-${goal.id}`}
+                          data-dropdown-toggle={`dropdown-${goal.id}`}
                           className="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                           type="button"
                         >
@@ -241,17 +281,17 @@ export default function DailyExpenses() {
                           </svg>
                         </button>
                         <div
-                          id={`dropdown-${dailyExpense.id}`}
+                          id={`dropdown-${goal.id}`}
                           className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                         >
                           <ul
                             className="py-1 text-sm"
-                            aria-labelledby={`dropdown-button-${dailyExpense.id}`}
+                            aria-labelledby={`dropdown-button-${goal.id}`}
                           >
                             <li>
                               <a
                                 type="button"
-                                href={`/update-daily-expense/${dailyExpense.id}`}
+                                href={`/update-goal/${goal.id}`}
                                 className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
                               >
                                 <svg
@@ -274,9 +314,9 @@ export default function DailyExpenses() {
                             <li>
                               <button
                                 type="button"
-                                data-modal-target="readDailyExpenseModal"
-                                data-modal-toggle="readDailyExpenseModal"
-                                onClick={() => handlePreviewClick(dailyExpense)}
+                                data-modal-target="readGoalModal"
+                                data-modal-toggle="readGoalModal"
+                                onClick={() => handlePreviewClick(goal)}
                                 className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
                               >
                                 <svg
@@ -299,10 +339,10 @@ export default function DailyExpenses() {
                             <li>
                               <button
                                 type="button"
-                                data-modal-target="deleteDailyExpenseModal"
-                                data-modal-toggle="deleteDailyExpenseModal"
+                                data-modal-target="deleteGoalModal"
+                                data-modal-toggle="deleteGoalModal"
                                 className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400"
-                                onClick={() => handleDeleteClick(dailyExpense)}
+                                onClick={() => handleDeleteClick(goal)}
                               >
                                 <svg
                                   className="w-4 h-4 mr-2"
@@ -333,8 +373,8 @@ export default function DailyExpenses() {
         </div>
       </section>
 
-      <ExpenseModal dailyExpense={modalExpense} />
-      <DeleteModal dailyExpense={modalExpense} onDelete={handleDelete} />
+      <GoalModal goal={modalGoal} />
+      <DeleteModal goal={modalGoal} onDelete={handleDelete} />
     </div>
   );
 }

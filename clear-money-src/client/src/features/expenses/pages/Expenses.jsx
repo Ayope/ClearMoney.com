@@ -210,7 +210,7 @@ export default function Expenses() {
                             backgroundColor: expense.category.color,
                             color: "black",
                             borderRadius: "20px",
-                            padding: "7px",
+                            padding: "4px 10px",
                           }}
                         >
                           {expense.category.name}
