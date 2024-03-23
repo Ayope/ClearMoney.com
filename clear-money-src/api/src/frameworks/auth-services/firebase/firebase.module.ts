@@ -5,7 +5,7 @@ import { FirebaseAuthService } from './firebase-auth.service';
 import { IAuthRepository } from '@/core/abstracts/auth-services/auth-repository.abstract';
 import * as admin from 'firebase-admin'
 import { FIREBASE_CONFIGURATION } from '@/configuration/firebase.config';
-import * as FIREBASE_ADMIN_JSON  from '@/configuration/authentication-clear-money-firebase-adminsdk-gi1oc-a2be002b8e.json';
+import { FIREBASE_ADMIN_CONFIGURATION }  from '@/configuration/firebaseAdmin.config';
 
 @Module({
   providers: [
@@ -24,7 +24,7 @@ import * as FIREBASE_ADMIN_JSON  from '@/configuration/authentication-clear-mone
     {
       provide: 'FIREBASE_ADMIN',
       useFactory: () => {
-        const serviceAccount = FIREBASE_ADMIN_JSON;
+        const serviceAccount = FIREBASE_ADMIN_CONFIGURATION();
         if (!admin.apps.length) {
           admin.initializeApp({
             credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
