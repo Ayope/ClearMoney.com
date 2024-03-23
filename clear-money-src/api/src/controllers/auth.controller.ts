@@ -8,7 +8,7 @@ import { UserUseCases } from "@/use-cases/user/user.use-case";
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiTags, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BadRequestException } from "@nestjs/common";
-import { bcrypt } from "bcrypt"
+const bcrypt = require('bcrypt');
 
 @ApiTags('Authentication')
 @Controller('api/auth')
@@ -54,7 +54,7 @@ export class AuthController{
         const authenticatedUser = await this.authUseCases.signup(user.email, user.password);
         
         user.authServiceID = authenticatedUser.user.uid;
-        user.password = bcrypt.hash(user.password, 10);
+        user.password = await bcrypt.hash(user.password, 10);
 
         const createdUser = await this.userUseCases.createUser(user);
 

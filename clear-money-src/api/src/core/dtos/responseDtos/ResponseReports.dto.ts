@@ -2,40 +2,41 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseReportsDto {
   /*
-      - how many expenses, revenues, daily expenses on each category
-      - how many categories, expenses, revenues, daily expenses a user have
-      - total of daily expenses on each month
-      - percentage achieved of each goal
+    - how many expenses, revenues, daily expenses on each category
+    - how many categories, expenses, revenues, daily expenses a user have
+    - total of daily expenses on each month
+    - percentage achieved of each goal
   */
+
   @ApiProperty({
     description: 'The total expenses by category',
     type: 'array',
     items: {
       type: 'object',
-      properties: { category: { type: 'string' }, total: { type: 'number' } },
+      properties: { category: { type: 'string' }, count: { type: 'number' }, total: { type: 'number' } },
     },
   })
-  totalExpensesByCategory: { category: string; total: number }[];
+  ExpensesByCategory: { category: string; count: number; total: number }[];
 
   @ApiProperty({
     description: 'The total revenues by category',
     type: 'array',
     items: {
       type: 'object',
-      properties: { category: { type: 'string' }, total: { type: 'number' } },
+      properties: { category: { type: 'string' }, count: { type: 'number' }, total: { type: 'number' } },
     },
   })
-  totalRevenuesByCategory: { category: string; total: number }[];
+  RevenuesByCategory: { category: string; count: number; total: number }[];
 
   @ApiProperty({
     description: 'The total daily expenses by category',
     type: 'array',
     items: {
       type: 'object',
-      properties: { category: { type: 'string' }, total: { type: 'number' } },
+      properties: { category: { type: 'string' }, count: { type: 'number' }, total: { type: 'number' } },
     },
   })
-  totalDailyExpensesByCategory: { category: string; total: number }[];
+  DailyExpensesByCategory: { category: string; count: number; total: number }[];
 
   @ApiProperty({
     description: 'The user stats',

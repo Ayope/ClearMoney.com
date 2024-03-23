@@ -54,15 +54,15 @@ export class DailyExpenseController{
         };
     }
     
-    private async checkIfDailyExpenseExist(DailyExpense : DailyExpense, ignoreId ?: string) {
+    // private async checkIfDailyExpenseExist(DailyExpense : DailyExpense, ignoreId ?: string) {
 
-        const existingDailyExpense = await this.DailyExpenseUseCases.getByName(DailyExpense.name);
+    //     const existingDailyExpense = await this.DailyExpenseUseCases.getByName(DailyExpense.name);
     
-        if (existingDailyExpense && existingDailyExpense['id'] !== ignoreId) {
-            throw new BadRequestException('Daily Expense already exist');
-        }
+    //     if (existingDailyExpense && existingDailyExpense['id'] !== ignoreId) {
+    //         throw new BadRequestException('Daily Expense already exist');
+    //     }
 
-    }
+    // }
 
     private async checkIfCategoryAndUserLegit(DailyExpenseDto : CreateDailyExpenseDto | UpdateDailyExpenseDto) {
         if(
@@ -77,7 +77,6 @@ export class DailyExpenseController{
         
         if(await this.UserUseCases.getUser(DailyExpenseDto.user_id) === null){
             throw new NotFoundException('User not found');
-            //TODO check also if the user authenticated is the one that make this request by checking the id of the user who made the request with the id of the authenticated user 
         }
     }
 
@@ -90,7 +89,7 @@ export class DailyExpenseController{
 
         const DailyExpense = this.DailyExpenseFactoryService.createNewDailyExpense(DailyExpenseDto);
         
-        await this.checkIfDailyExpenseExist(DailyExpense);
+        // await this.checkIfDailyExpenseExist(DailyExpense);
 
         await this.checkIfCategoryAndUserLegit(DailyExpenseDto);
         
@@ -128,7 +127,7 @@ export class DailyExpenseController{
         
         const DailyExpense = this.DailyExpenseFactoryService.createUpdatedDailyExpense(DailyExpenseDto);
                 
-        await this.checkIfDailyExpenseExist(DailyExpense, id);
+        // await this.checkIfDailyExpenseExist(DailyExpense, id);
         
         await this.checkIfCategoryAndUserLegit(DailyExpenseDto);
 

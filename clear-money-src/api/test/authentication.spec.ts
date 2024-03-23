@@ -5,11 +5,12 @@ import { UserUseCases } from "@/use-cases/user/user.use-case";
 import { AuthFactoryService } from "@/use-cases/auth/auth-factory.service";
 import { UserFactoryService } from "@/use-cases/user/user-factory.service";
 import { CreateUserDto } from "@/core/dtos";
-import { AllExceptionsFilter } from '@/frameworks/error-handling/filters/AllExceptionsFilter';
+import { AllExceptionsFilter } from '@/error-handling/filters/AllExceptionsFilter';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '@/app.module';
 import * as request from 'supertest';
 import { LoginDto } from '@/core/dtos/requestDtos/login.dto';
+const bcrypt = require("bcrypt");
 
 describe('Authentication (login and signup) tests', () => {
     let authController: AuthController;
@@ -86,6 +87,10 @@ describe('Authentication (login and signup) tests', () => {
             mockUserFactoryService.createNewUser = jest.fn().mockReturnValue(createdUser);
             mockAuthUseCases.signup = jest.fn().mockResolvedValue(authenticatedUser);
             mockUserUseCases.createUser = jest.fn().mockResolvedValue(createdUser);
+
+            jest.spyOn(bcrypt, 'hash').mockImplementation(async (data: string, salt: number) => {
+                return 'mockHashedPassword';
+            })
 
             const result = await authController.signup(userDto);
 

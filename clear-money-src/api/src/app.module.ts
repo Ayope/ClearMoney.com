@@ -19,7 +19,9 @@ import { TokenMiddleware } from './middlewares/token.middleware';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({}),
+    ConfigModule.forRoot({
+      envFilePath: process.env.NODE_ENV === 'production' ? 'prod.env' : 'dev.env',
+    }),
     DataServicesModule,
     AuthServicesModule,
     AuthUseCasesModule,
@@ -45,11 +47,11 @@ export class AppModule implements NestModule {
     consumer
       .apply(TokenMiddleware)
       .forRoutes(
-        // { path: 'api/category/*', method: RequestMethod.ALL },
-        // { path: 'api/financialTransaction/*', method: RequestMethod.ALL },
-        // { path: 'api/dailyExpense/*', method: RequestMethod.ALL },
-        // { path: 'api/goal/*', method: RequestMethod.ALL },
-        // { path: 'api/reports/*', method: RequestMethod.ALL },
+        { path: 'api/category/*', method: RequestMethod.ALL },
+        { path: 'api/financialTransaction/*', method: RequestMethod.ALL },
+        { path: 'api/dailyExpense/*', method: RequestMethod.ALL },
+        { path: 'api/goal/*', method: RequestMethod.ALL },
+        { path: 'api/reports/*', method: RequestMethod.ALL },
       );  
   }
 }

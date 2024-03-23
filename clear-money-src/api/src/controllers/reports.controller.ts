@@ -26,41 +26,44 @@ export class ReportsController {
 
         const financialTransactions = await this.financialTransactionUseCases.getFinancialTransactionsByUserId(userId);
         
-        let totalExpensesByCategory: { category: string, total: number }[] = [];
-        let totalRevenuesByCategory: { category: string, total: number }[] = [];
+        let ExpensesByCategory: { category: string; count: number; total: number }[] = [];
+        let RevenuesByCategory: { category: string; count: number; total: number }[] = [];
         let expensesCount = 0;
         let revenuesCount = 0;
     
         financialTransactions.forEach(transaction => {
             let category = transaction.category.name;
-            
+            let amount = transaction.amount;
+
             if (transaction.type === FinancialType.Expense) {
                 expensesCount++;
-                let expenseCategory = totalExpensesByCategory.find(e => e.category === category);
+                let expenseCategory = ExpensesByCategory.find(e => e.category === category);
                 if (expenseCategory) {
-                    expenseCategory.total += 1;
+                    expenseCategory.count += 1;
+                    expenseCategory.total += amount;
                 } else {
-                    totalExpensesByCategory.push({ category: category, total: 1 });
+                    ExpensesByCategory.push({ category: category, count : 1, total: amount });
                 }
             } else if (transaction.type === FinancialType.Revenue) {
                 revenuesCount++;
-                let revenueCategory = totalRevenuesByCategory.find(r => r.category === category);
+                let revenueCategory = RevenuesByCategory.find(r => r.category === category);
                 if (revenueCategory) {
-                    revenueCategory.total += 1;
+                    revenueCategory.count += 1;
+                    revenueCategory.total += amount;
                 } else {
-                    totalRevenuesByCategory.push({ category: category, total: 1 });
+                    RevenuesByCategory.push({ category: category, count : 1, total: amount });
                 }
             }
         });
 
-        return { totalExpensesByCategory, totalRevenuesByCategory, expensesCount, revenuesCount };
+        return { ExpensesByCategory, RevenuesByCategory, expensesCount, revenuesCount };
     }
 
     private async dailyExpensesReports(userId: string) {
         
         const dailyExpenses = await this.DailyExpenseUseCases.getDailyExpensesByUserId(userId);
         
-        let totalDailyExpensesByCategory: { category: string, total: number }[] = [];
+        let DailyExpensesByCategory: { category: string; count: number; total: number }[] = [];
         let totalDailyExpensesByMonth: { month: string, total : number }[] = [];
         let dailyExpensesCount = dailyExpenses.length;
         
@@ -68,23 +71,25 @@ export class ReportsController {
             
             let month = dailyExpense.date.toLocaleString('default', { month: 'long', year: 'numeric' });
             let category = dailyExpense.category.name;
+            let amount = dailyExpense.amount;
                         
-            let expenseCategory = totalDailyExpensesByCategory.find(e => e.category === category);
-            if (expenseCategory) {
-                expenseCategory.total += 1;
+            let dailyExpenseCategory = DailyExpensesByCategory.find(e => e.category === category);
+            if (dailyExpenseCategory) {
+                dailyExpenseCategory.count += 1;
+                dailyExpenseCategory.total += amount;
             } else {
-                totalDailyExpensesByCategory.push({ category: category, total: 1 });
+                DailyExpensesByCategory.push({ category: category, count : 1, total: amount });
             }
 
-            let monthExpense = totalDailyExpensesByMonth.find(m => m.month === month);
-            if (monthExpense) {
-                monthExpense.total += 1;
+            let monthDailyExpense = totalDailyExpensesByMonth.find(m => m.month === month);
+            if (monthDailyExpense) {
+                monthDailyExpense.total += amount;
             } else {
-                totalDailyExpensesByMonth.push({ month: month, total: 1 });
+                totalDailyExpensesByMonth.push({ month: month, total: amount });
             }            
         });
 
-        return { totalDailyExpensesByCategory, totalDailyExpensesByMonth, dailyExpensesCount};
+        return { DailyExpensesByCategory, totalDailyExpensesByMonth, dailyExpensesCount};
 
     }
 
@@ -115,15 +120,15 @@ export class ReportsController {
     @ApiParam({ name: 'userId', description: 'The ID of the user', required: true, type: String })
     async getReports(@Param("userId") userId: string) : Promise<ResponseReportsDto> {
         
-        const { totalExpensesByCategory, totalRevenuesByCategory, expensesCount, revenuesCount} = await this.financialTransactionsReports(userId);
-        const { totalDailyExpensesByCategory, totalDailyExpensesByMonth, dailyExpensesCount} = await this.dailyExpensesReports(userId);
+        const { ExpensesByCategory, RevenuesByCategory, expensesCount, revenuesCount} = await this.financialTransactionsReports(userId);
+        const { DailyExpensesByCategory, totalDailyExpensesByMonth, dailyExpensesCount} = await this.dailyExpensesReports(userId);
         const {categoriesCount} = await this.categoryReports(userId);
         const {goalsAchievement} = await this.goalReports(userId);
         
         return {
-            totalExpensesByCategory,
-            totalRevenuesByCategory,
-            totalDailyExpensesByCategory,
+            ExpensesByCategory,
+            RevenuesByCategory,
+            DailyExpensesByCategory,
             userStats: {
                 categoriesCount,
                 expensesCount,

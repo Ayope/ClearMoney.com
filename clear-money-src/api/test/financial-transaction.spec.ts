@@ -3,7 +3,7 @@ import { FinancialTransactionUseCases } from "@/use-cases/financial-transaction/
 import { FinancialTransactionFactoryService } from "@/use-cases/financial-transaction/financial-transaction-factory.service";
 import { AppModule } from "@/app.module";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { AllExceptionsFilter } from "@/frameworks/error-handling/filters/AllExceptionsFilter";
+import { AllExceptionsFilter } from "@/error-handling/filters/AllExceptionsFilter";
 import { Test, TestingModule } from "@nestjs/testing";
 import FinancialType from "@/core/enums/financial-type.enum";
 import { CreateFinancialTransactionDto } from "@/core/dtos";
@@ -89,7 +89,17 @@ describe('FinancialTransactionController', () => {
             amount: 100,
             description: 'Test Description',
             type: FinancialType.Expense,
-            category: { _id: 'testCategoryId' , name: 'Category Name' },
+            category: { 
+                _id: 'testCategoryId', 
+                name: 'Category Name',
+                color : '#9866a6',
+                user: {
+                    id: "mockUserId",
+                    first_name: "mockFirstName",
+                    last_name: "mockLastName",
+                    email: "mockEmail@email.com",
+                }
+            },
             user: {
                 id: "mockUserId",
                 first_name: "mockFirstName",
@@ -101,7 +111,17 @@ describe('FinancialTransactionController', () => {
         }
 
         mockFinancialTransactionFactoryService.createNewFinancialTransaction = jest.fn().mockReturnValue(financialTransaction);
-        mockCategoryUseCases.getCategory = jest.fn().mockResolvedValue({ _id: 'testCategoryId' , name: 'Category Name' });
+        mockCategoryUseCases.getCategory = jest.fn().mockResolvedValue({ 
+            _id: 'testCategoryId', 
+            name: 'Category Name',
+            color : '#9866a6',
+            user: {
+                id: "mockUserId",
+                first_name: "mockFirstName",
+                last_name: "mockLastName",
+                email: "mockEmail@email.com",
+            }
+        });
         mockUserUseCases.getUser = jest.fn().mockResolvedValue({
             id: "mockUserId",
             first_name: "mockFirstName",
@@ -120,7 +140,17 @@ describe('FinancialTransactionController', () => {
             amount: 100,
             description: 'Test Description',
             type: FinancialType.Expense,
-            category: { id: "testCategoryId" , name: 'Category Name' },
+            category: { 
+                id: 'testCategoryId', 
+                name: 'Category Name',
+                color : '#9866a6',
+                user: {
+                    id: "mockUserId",
+                    first_name: "mockFirstName",
+                    last_name: "mockLastName",
+                    email: "mockEmail@email.com",
+                }
+            },
             user: {
                 id: "mockUserId",
                 first_name: "mockFirstName",
@@ -132,7 +162,6 @@ describe('FinancialTransactionController', () => {
 
     it('should error 400 when the name of the transaction is not provided on the body of the request', async () => {
 
-
         const response = await request(app.getHttpServer())
           .post('/api/financialTransaction')
           .send({
@@ -142,7 +171,6 @@ describe('FinancialTransactionController', () => {
             "type" : "expense",
             "category_id" : "65f06fa63028aca452bb6456",
             "user_id" : "65f03bfae0ba1bd41d347b69"
-            //TODO the category_id and user_id should be real records on database before testing
             });
     
         expect(response.status).toBe(400);

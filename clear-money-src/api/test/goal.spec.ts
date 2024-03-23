@@ -1,6 +1,6 @@
 import { AppModule } from "@/app.module";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { AllExceptionsFilter } from "@/frameworks/error-handling/filters/AllExceptionsFilter";
+import { AllExceptionsFilter } from "@/error-handling/filters/AllExceptionsFilter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { CreateGoalDto } from "@/core/dtos";
 import { UserUseCases } from "@/use-cases/user/user.use-case";
@@ -66,6 +66,7 @@ describe('FinancialTransactionController', () => {
             targeted_amount: 15000,
             saving_frequency: SavingFrequency.Yearly,
             targeted_date: date,
+            starting_date: new Date(date.getTime() - 1000 * 60 * 60 * 24),
             user_id: "mockUserId",
         };
 
@@ -75,6 +76,7 @@ describe('FinancialTransactionController', () => {
             targeted_amount: 15000,
             saving_frequency: SavingFrequency.Yearly,
             targeted_date: date,
+            starting_date: new Date(date.getTime() - 1000 * 60 * 60 * 24),
             user: "mockUserId",
         };
 
@@ -85,6 +87,7 @@ describe('FinancialTransactionController', () => {
             targeted_amount: 15000,
             saving_frequency: 'yearly',
             targeted_date: date,
+            starting_date: new Date("2024-03-23T15:05:12.561Z"),
             current_amount: 0,
             saving_amount: 7500,
             user: {
@@ -117,6 +120,7 @@ describe('FinancialTransactionController', () => {
             targeted_amount: 15000,
             saving_frequency: 'yearly',
             targeted_date: date,
+            starting_date: new Date("2024-03-23T15:05:12.561Z"),
             current_amount: 0,
             saving_amount: 7500,
             user: {
@@ -138,8 +142,8 @@ describe('FinancialTransactionController', () => {
             "targeted_amount": 15000,
             "saving_frequency": "yearly",
             "targeted_date": "2025-03-14T00:00:00.000Z",
+            "starting_date": "2024-03-13T00:00:00.000Z",
             "user_id": "65f03bfae0ba1bd41d347b69"
-            //TODO the category_id and user_id should be real records on database before testing
             });
     
         expect(response.status).toBe(400);

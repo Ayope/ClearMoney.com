@@ -1,6 +1,6 @@
 import { AppModule } from "@/app.module";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { AllExceptionsFilter } from "@/frameworks/error-handling/filters/AllExceptionsFilter";
+import { AllExceptionsFilter } from "@/error-handling/filters/AllExceptionsFilter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { CreateDailyExpenseDto } from "@/core/dtos";
 import { CategoryUseCases } from "@/use-cases/category/category.use-case";
@@ -92,7 +92,17 @@ describe('FinancialTransactionController', () => {
             amount: 100,
             description: 'Test Description',
             date: date,
-            category: { _id: 'testCategoryId' , name: 'Category Name' },
+            category: { 
+                _id: 'testCategoryId', 
+                name: 'Category Name',
+                color : '#9866a6',
+                user: {
+                    id: "mockUserId",
+                    first_name: "mockFirstName",
+                    last_name: "mockLastName",
+                    email: "mockEmail@email.com",
+                }
+            },
             user: {
                 id: "mockUserId",
                 first_name: "mockFirstName",
@@ -104,7 +114,17 @@ describe('FinancialTransactionController', () => {
         }
 
         mockDailyExpenseFactoryService.createNewDailyExpense = jest.fn().mockReturnValue(dailyExpense);
-        mockCategoryUseCases.getCategory = jest.fn().mockResolvedValue({ _id: 'testCategoryId' , name: 'Category Name' });
+        mockCategoryUseCases.getCategory = jest.fn().mockResolvedValue({ 
+            _id: 'testCategoryId', 
+            name: 'Category Name',
+            color : '#9866a6',
+            user: {
+                id: "mockUserId",
+                first_name: "mockFirstName",
+                last_name: "mockLastName",
+                email: "mockEmail@email.com",
+            }
+        });
         mockUserUseCases.getUser = jest.fn().mockResolvedValue({
             id: "mockUserId",
             first_name: "mockFirstName",
@@ -123,7 +143,17 @@ describe('FinancialTransactionController', () => {
             amount: 100,
             description: 'Test Description',
             date : date,
-            category: { id: "testCategoryId" , name: 'Category Name' },
+            category: { 
+                id: 'testCategoryId', 
+                name: 'Category Name',
+                color : '#9866a6',
+                user: {
+                    id: "mockUserId",
+                    first_name: "mockFirstName",
+                    last_name: "mockLastName",
+                    email: "mockEmail@email.com",
+                }
+            },
             user: {
                 id: "mockUserId",
                 first_name: "mockFirstName",
@@ -144,7 +174,6 @@ describe('FinancialTransactionController', () => {
             "date" : date,
             "category_id" : "65f06fa63028aca452bb6456",
             "user_id" : "65f03bfae0ba1bd41d347b69"
-            //TODO the category_id and user_id should be real records on database before testing
             });
     
         expect(response.status).toBe(400);

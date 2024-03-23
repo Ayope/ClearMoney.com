@@ -20,6 +20,8 @@ const bcrypt = require('bcrypt');
 @Controller('seeder')
 export class SeederController{
     
+    private users : User[] = [];
+
     constructor(
         private authUseCases : AuthUseCases, 
         private userUseCases : UserUseCases,
@@ -138,6 +140,8 @@ export class SeederController{
             
             const user = this.generateFakeUser();
             
+            this.users.push(user);
+
             const authUser = await this.authUseCases.signup(user.email, user.password);
             
             user.authServiceID = authUser.user.uid;
@@ -163,7 +167,10 @@ export class SeederController{
             
         }
 
-        return "database was seeded successfully :)"
+        return {
+            message : "database was seeded successfully :)",
+            users : this.users
+        }
     }
 
 }

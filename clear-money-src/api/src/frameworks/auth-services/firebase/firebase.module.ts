@@ -25,11 +25,13 @@ import * as FIREBASE_ADMIN_JSON  from '@/configuration/authentication-clear-mone
       provide: 'FIREBASE_ADMIN',
       useFactory: () => {
         const serviceAccount = FIREBASE_ADMIN_JSON;
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-        });
+        if (!admin.apps.length) {
+          admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+          });
+        }
         return admin;
-      },
+      }
     },
     {
       provide: IAuthRepository,

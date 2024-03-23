@@ -58,7 +58,7 @@ export class FinancialTransactionController{
 
         const existingFinancialTransaction = await this.FinancialTransactionUseCases.getByName(FinancialTransaction.name);
         
-        if (existingFinancialTransaction && existingFinancialTransaction['id'] !== ignoreId) {
+        if (existingFinancialTransaction && existingFinancialTransaction.category['id'] === FinancialTransaction.category && existingFinancialTransaction['id'] !== ignoreId) {
             throw new BadRequestException('FinancialTransaction already exist');
         }
     }

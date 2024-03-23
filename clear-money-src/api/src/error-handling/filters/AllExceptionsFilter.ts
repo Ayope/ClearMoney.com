@@ -42,6 +42,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
           status = HttpStatus.UNAUTHORIZED;
           message = 'The credentials used for authentication are invalid';
           break;
+        case 'auth/id-token-expired':
+          status = HttpStatus.UNAUTHORIZED;
+          message = 'The provided token is expired';
+          break;
         default:
           status = HttpStatus.INTERNAL_SERVER_ERROR;
           message = 'Firebase Error: ' + exception.message;
