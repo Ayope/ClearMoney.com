@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import LoginIn from '@/features/auth/pages/Login.jsx';
+import LogIn from '@/features/auth/pages/Login.jsx';
 import Register from '@/features/auth/pages/Register.jsx';
 import UserDashboard from './features/dashboard/pages/UserDashboard';
 import UserLayout from './layouts/UserLayout';
@@ -22,6 +22,8 @@ import PageNotFound from './features/404';
 import Goals from './features/goals/pages/Goals';
 import CreateGoalForm from './features/goals/pages/AddGoal';
 import UpdateGoalForm from './features/goals/pages/UpdateGoal';
+import IsAuth from './guards/isAuth';
+import IsNotAuth from './guards/isNotAuth';
 
 function App() {  
 
@@ -30,7 +32,7 @@ function App() {
       <div>
         <ToastContainer position="top-right" />
         <Routes>
-          <Route path="/" element={<UserLayout/>}>
+          <Route path="/" element={<IsNotAuth component={UserLayout}/>}>
             
             <Route index element={<UserDashboard/>}/>
             
@@ -54,8 +56,8 @@ function App() {
 
             <Route path="*" element={<PageNotFound/>}/>
           </Route>
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/login" element={<LoginIn/>}/>
+          <Route path="/register" element={<IsAuth component={Register} />}/>
+          <Route path="/login" element={<IsAuth component={LogIn} />}/>
         </Routes>
       </div>
     </UserContextProvider>

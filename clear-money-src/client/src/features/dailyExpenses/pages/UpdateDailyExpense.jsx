@@ -35,7 +35,6 @@ useEffect(() => {
   fetchData();
 }, []);
 
-  console.log(dailyExpense);
 
   const initialValues = {
     name: dailyExpense.name || "",

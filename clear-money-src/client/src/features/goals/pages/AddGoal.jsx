@@ -25,8 +25,8 @@ const CreateGoalForm = () => {
     targeted_amount: Yup.number()
       .required("Amount is required")
       .positive("Amount must be positive"),
-    description: Yup.string().required("Description is required"),
-    saving_frequency: Yup.string(),
+    description: Yup.string(),
+    saving_frequency: Yup.string().required("Saving frequency is required"),
     targeted_date: Yup.date()
       .required("Targeted date is required")
       .min(new Date(), "Targeted date must be in the future"),
@@ -49,13 +49,7 @@ const CreateGoalForm = () => {
               createdGoal.saving_amount
             }$</strong> <strong>${
               createdGoal.saving_frequency
-            }</strong> to reach your goal by <strong>${new Date(
-              createdGoal.targeted_date
-            ).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}</strong> starting from <strong>this ${createdGoal.saving_frequency === "yearly" ? "year" : "month"}</strong>`,
+            }</strong> starting from <strong>this ${createdGoal.saving_frequency === "yearly" ? "year" : "month"}</strong>`,
             style: "text-align: center; margin-top: 30px;",
           },
         },
@@ -64,8 +58,6 @@ const CreateGoalForm = () => {
         navigate("/goals");
       });
 
-      console.log(createdGoal);
-      // navigate("/revenues")
     } catch (error) {
       handleErrors(error);
     }

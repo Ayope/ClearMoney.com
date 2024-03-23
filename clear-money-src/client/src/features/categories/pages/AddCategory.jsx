@@ -15,7 +15,6 @@ export default function CreateCategoryModal({onSubmit}) {
   });
 
   const handleSubmit = async (values, {resetForm}) => {
-    console.log(values);
     try {
       const category = await api("POST", `api/category`, {
         name: values.name,

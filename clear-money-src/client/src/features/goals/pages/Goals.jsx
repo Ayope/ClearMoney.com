@@ -20,7 +20,6 @@ export default function Goals() {
     async function fetchGoals() {
       try {
         const fetchedGoals = await api("GET", `api/goal/user/${user.id}`);
-        console.log(fetchedGoals);
         setGoals(fetchedGoals);
         setFilteredGoals(fetchedGoals);
       } catch (error) {

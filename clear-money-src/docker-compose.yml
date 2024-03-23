@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: nestjs-app
+    depends_on: 
+      - mongo_db
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: react-app
+    ports:
+      - "5173:5173"
+  
+  mongo_db:
+    image: mongo
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo_data:

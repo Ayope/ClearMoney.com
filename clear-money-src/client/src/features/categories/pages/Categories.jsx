@@ -47,7 +47,6 @@ export default function Categories() {
   };
 
   const handleAddNewCategory = (category) => {
-    console.log(category);
     setCategories([...categories, category]);
     setFilteredCategories([...categories, category]);
   }

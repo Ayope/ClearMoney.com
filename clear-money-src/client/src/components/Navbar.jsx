@@ -28,7 +28,7 @@ export default function Navbar() {
                 ></path>
               </svg>
             </button>
-            <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+            <a href="#" className="flex items-center space-x-1 rtl:space-x-reverse">
               <img src="/moneyLogo.svg" className="h-12" alt="Flowbite Logo" />
               <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Clear Money</span>
             </a>

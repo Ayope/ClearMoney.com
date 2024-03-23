@@ -33,7 +33,7 @@ const CreateDailyExpenseForm = () => {
     name: "",
     amount: "",
     description: "",
-    date : "",
+    date : new Date().toISOString().split("T")[0],
     category: "Select category",
   };
 
@@ -43,7 +43,7 @@ const CreateDailyExpenseForm = () => {
       .required("Amount is required")
       .positive("Amount must be positive"),
     description: Yup.string(),
-    date : Yup.date().required("Date is required"),
+    date : Yup.date(),
     category: Yup.string().notOneOf(
       ["Select category"],
       "Category is required"
@@ -240,7 +240,6 @@ const CreateDailyExpenseForm = () => {
                     name="date"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="$2999"
-                    required
                   />
                   <ErrorMessage
                     name="date"

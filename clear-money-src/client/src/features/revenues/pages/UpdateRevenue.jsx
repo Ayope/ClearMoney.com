@@ -35,8 +35,6 @@ useEffect(() => {
   fetchData();
 }, []);
 
-  console.log(revenue);
-
   const initialValues = {
     name: revenue.name || "",
     amount: revenue.amount || "",
