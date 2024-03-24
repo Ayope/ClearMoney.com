@@ -23,4 +23,8 @@ export class FirebaseAuthService implements IAuthRepository {
     return Promise.all(deletionPromises);
   }
 
+  async logout() : Promise<any> {
+    return this.auth.signOut();
+  }
+
 }

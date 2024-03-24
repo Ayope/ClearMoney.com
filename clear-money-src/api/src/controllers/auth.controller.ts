@@ -87,4 +87,12 @@ export class AuthController{
             tokens: loggedUser.user.stsTokenManager
         });
     }
+
+    @Post('logout')
+    @ApiOperation({ summary: 'Log out of the current user account' })
+    @ApiResponse({ status: 200, description: 'User logged out successfully' })
+    @ApiResponse({ status: 500, description: 'Internal server error' })
+    async logout() : Promise<any> {
+        return this.authUseCases.logout();
+    }
 }

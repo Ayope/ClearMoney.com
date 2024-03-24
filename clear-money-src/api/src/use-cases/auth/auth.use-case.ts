@@ -15,4 +15,8 @@ export class AuthUseCases{
     login(email:string, password:string){
         return this.authService.login(email, password);
     }
+
+    logout(){
+        return this.authService.logout();
+    }
 }

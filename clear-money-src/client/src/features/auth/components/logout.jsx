@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { UserContext } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
+import api from "@/utils/api";
 
 export default function LogoutButton() {
   const { resetUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
+    await api("POST", "api/auth/logout");
     resetUser();
     navigate("/login");
   };
