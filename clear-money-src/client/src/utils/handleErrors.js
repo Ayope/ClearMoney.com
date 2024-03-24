@@ -20,7 +20,4 @@ export default function handleErrors(error){
     }else{
         console.error(error);
     }
-
-    
-
 }

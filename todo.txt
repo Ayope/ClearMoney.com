@@ -1,2 +1,2 @@
-- add refresh token logic
 - add to the swagger documentation the format of the error object on the 404 errors
+- deploy the application on ECS (complete github actions)

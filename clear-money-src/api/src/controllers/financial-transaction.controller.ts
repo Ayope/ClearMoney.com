@@ -7,6 +7,7 @@ import { FinancialTransactionUseCases } from "@/use-cases/financial-transaction/
 import { Controller, Post, Get, Body, BadRequestException, Param, Delete, Put, NotFoundException } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UserUseCases } from '@/use-cases/user/user.use-case';
+import { FirebaseError } from 'firebase/app';
 
 @ApiTags('Financial Transaction')
 @Controller('api/financialTransaction')
