@@ -62,6 +62,7 @@ jobs:
           REPOSITORY: backend
         working-directory: clear-money-src/api
         run: |
+          echo $ECR_REGISTRY
           docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
 
