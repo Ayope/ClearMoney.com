@@ -54,8 +54,8 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/react-app:latest
         
         # Amazon ECR
-        
-      - name: Build, tag, and push backend image to Amazon ECR
+
+      - name: Build, tag, and push back-end image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
