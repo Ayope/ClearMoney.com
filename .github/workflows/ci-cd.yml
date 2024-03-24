@@ -57,8 +57,7 @@ jobs:
 
       - name: Build, tag, and push back-end image to Amazon ECR
         env:
-          # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REGISTRY: "public.ecr.aws/o4r4d4p0"
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
           REPOSITORY: backend
         working-directory: clear-money-src/api
@@ -67,12 +66,12 @@ jobs:
           docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-      # - name: Build, tag, and push front-end image to Amazon ECR
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     IMAGE_TAG: ${{ github.sha }}
-      #     REPOSITORY: client
-      #   working-directory: clear-money-src/client
-      #   run: |
-      #     docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
-      #     docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG            
+      - name: Build, tag, and push front-end image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          REPOSITORY: client
+        working-directory: clear-money-src/client
+        run: |
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG            
